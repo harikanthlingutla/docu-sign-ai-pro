@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -76,6 +75,32 @@ export const signatureTemplates: SignatureTemplateStyle[] = [
     fontFamily: 'cursive',
     color: '#1D4ED8',
   },
+  {
+    id: 'golden-classic',
+    name: 'Golden Classic',
+    backgroundColor: '#FEF7CD',
+    fontFamily: 'cursive',
+    color: '#8B4513',
+    borderStyle: 'border-b-2 border-[#F97316]',
+  },
+  {
+    id: 'golden-elegant',
+    name: 'Golden Elegant',
+    backgroundColor: '#FEC6A1',
+    fontFamily: 'serif',
+    color: '#6B4423',
+    backgroundGradient: 'bg-gradient-to-r from-[#FEF7CD] to-[#FEC6A1]',
+    borderStyle: 'border-l-4 border-[#F97316]',
+  },
+  {
+    id: 'golden-luxe',
+    name: 'Golden Luxe',
+    backgroundColor: '#FFE5B4',
+    fontFamily: 'cursive',
+    color: '#8B4513',
+    backgroundGradient: 'bg-gradient-to-r from-[#FFC857] to-[#FFD700]',
+    borderStyle: 'border-b border-[#DAA520]',
+  }
 ];
 
 interface SignatureTemplateProps {
