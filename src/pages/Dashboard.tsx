@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DocumentUpload } from '@/components/DocumentUpload';
 import { SignatureCanvas } from '@/components/SignatureCanvas';
 import { ChatInterface } from '@/components/ChatInterface';
-import { FileText, MessageSquare, Pencil, User, LogOut } from 'lucide-react';
+import { FileText, MessageSquare, Pencil, Shield, User, LogOut } from 'lucide-react';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('documents');
@@ -74,6 +74,18 @@ const Dashboard = () => {
           >
             <MessageSquare className="h-5 w-5" />
             <span>AI Assistant</span>
+          </button>
+          
+          <button
+            className={`w-full flex items-center space-x-3 px-4 py-3 text-left ${
+              activeTab === 'security'
+                ? 'bg-primary-100 text-primary font-medium'
+                : 'text-secondary hover:bg-secondary-100'
+            }`}
+            onClick={() => setActiveTab('security')}
+          >
+            <Shield className="h-5 w-5" />
+            <span>Security Keys</span>
           </button>
         </div>
         
@@ -165,6 +177,18 @@ const Dashboard = () => {
             <MessageSquare className="h-5 w-5" />
             <span className="text-xs mt-1">Assistant</span>
           </button>
+          
+          <button
+            className={`flex-1 flex flex-col items-center py-2 ${
+              activeTab === 'security'
+                ? 'text-primary'
+                : 'text-tertiary'
+            }`}
+            onClick={() => setActiveTab('security')}
+          >
+            <Shield className="h-5 w-5" />
+            <span className="text-xs mt-1">Security</span>
+          </button>
         </div>
       </div>
 
@@ -199,10 +223,45 @@ const Dashboard = () => {
           {activeTab === 'assistant' && (
             <div>
               <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">AI Assistant</h1>
+                <h1 className="text-2xl font-bold">AI Document Assistant</h1>
               </div>
               <div className="bg-white rounded-lg shadow-sm h-[600px]">
                 <ChatInterface />
+              </div>
+            </div>
+          )}
+          
+          {activeTab === 'security' && (
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-bold">Security Keys</h1>
+                <Button>Generate New Key</Button>
+              </div>
+              <div className="bg-white rounded-lg p-6 shadow-sm">
+                <h2 className="text-lg font-semibold mb-4">Quantum-Resistant Cryptographic Keys</h2>
+                <div className="space-y-6">
+                  <div className="bg-secondary-100 p-4 rounded-lg">
+                    <div className="flex justify-between items-center mb-2">
+                      <h3 className="font-medium">CRYSTALS-Dilithium2 Public Key</h3>
+                      <Button variant="outline" size="sm">Copy</Button>
+                    </div>
+                    <div className="bg-white p-3 rounded border border-secondary-200 font-mono text-xs overflow-x-auto">
+                      dil2_pk_0x98a2f5ff937d41c5a7d872f51d34f9cf87c0adabba36435ca5b01a5cacbed3b2...
+                    </div>
+                    <p className="text-xs text-tertiary mt-2">
+                      This is your quantum-resistant public key used for document verification.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium mb-2">About Post-Quantum Security</h3>
+                    <p className="text-sm text-tertiary">
+                      Your documents are secured using NIST-approved post-quantum cryptography standards. 
+                      CRYSTALS-Dilithium2 is used for digital signatures, protecting your documents against 
+                      future quantum computing attacks. Your private key never leaves your device.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           )}

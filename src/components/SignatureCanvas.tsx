@@ -1,6 +1,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Canvas, IEvent } from 'fabric/fabric-impl';
+import type { Canvas } from 'fabric';
 import { Button } from '@/components/ui/button';
 import { Trash, RotateCcw, Download } from 'lucide-react';
 
