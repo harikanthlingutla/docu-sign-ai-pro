@@ -1,9 +1,7 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DocumentUpload } from '@/components/DocumentUpload';
-import { SignatureCanvas } from '@/components/SignatureCanvas';
+import { SignaturesTab } from '@/components/SignaturesTab';
 import { ChatInterface } from '@/components/ChatInterface';
 import { FileText, MessageSquare, Pencil, Shield, User, LogOut } from 'lucide-react';
 
@@ -208,16 +206,7 @@ const Dashboard = () => {
           )}
           
           {activeTab === 'signatures' && (
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">My Signatures</h1>
-                <Button>Create New</Button>
-              </div>
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <h2 className="text-lg font-semibold mb-4">Create a Signature</h2>
-                <SignatureCanvas />
-              </div>
-            </div>
+            <SignaturesTab />
           )}
           
           {activeTab === 'assistant' && (
