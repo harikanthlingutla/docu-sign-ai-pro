@@ -59,7 +59,11 @@ export function SignatureCanvas() {
 
   const handleDownload = () => {
     if (fabricCanvas && !isEmpty) {
-      const dataURL = fabricCanvas.toDataURL('image/png');
+      // Using proper options object format instead of string
+      const dataURL = fabricCanvas.toDataURL({
+        format: 'png',
+        quality: 1
+      });
       const link = document.createElement('a');
       link.download = 'signature.png';
       link.href = dataURL;
