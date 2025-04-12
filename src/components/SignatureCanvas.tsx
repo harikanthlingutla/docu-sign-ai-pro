@@ -59,10 +59,11 @@ export function SignatureCanvas() {
 
   const handleDownload = () => {
     if (fabricCanvas && !isEmpty) {
-      // Using proper options object format instead of string
+      // Updated to include multiplier property
       const dataURL = fabricCanvas.toDataURL({
         format: 'png',
-        quality: 1
+        quality: 1,
+        multiplier: 2 // Increase resolution while keeping file size reasonable
       });
       const link = document.createElement('a');
       link.download = 'signature.png';
