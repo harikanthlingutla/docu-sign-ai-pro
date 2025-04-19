@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -33,29 +34,29 @@ export default {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: '#6B46C1', // vibrant purple from logo
+          DEFAULT: '#3B82F6', // vibrant blue
           foreground: '#FFFFFF',
-          100: '#F3E8FF',
-          200: '#E9D5FF',
-          300: '#D8B4FE',
-          400: '#C084FC',
-          500: '#6B46C1',
-          600: '#5B21B6',
-          700: '#4C1D95',
+          100: '#EFF6FF',
+          200: '#DBEAFE',
+          300: '#BFDBFE',
+          400: '#93C5FD',
+          500: '#3B82F6',
+          600: '#2563EB',
+          700: '#1D4ED8',
         },
         secondary: {
-          DEFAULT: '#F97316', // vibrant orange from logo
+          DEFAULT: '#1E293B', // deep navy
           foreground: '#FFFFFF',
-          100: '#FFF7ED',
-          200: '#FFEDD5',
-          300: '#FED7AA',
-          400: '#FB923C',
-          500: '#F97316',
-          600: '#EA580C',
-          700: '#C2410C',
+          100: '#F8FAFC',
+          200: '#F1F5F9',
+          300: '#E2E8F0',
+          400: '#CBD5E1',
+          500: '#1E293B',
+          600: '#0F172A',
+          700: '#0F172A',
         },
         tertiary: {
-          DEFAULT: '#0EA5E9', // bright blue from logo
+          DEFAULT: '#64748B', // slate
           foreground: '#FFFFFF',
         },
         destructive: {
