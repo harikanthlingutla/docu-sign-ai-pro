@@ -1,14 +1,18 @@
-
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import AnimatedTextCycle from '@/components/ui/animated-text-cycle';
 
 export function Hero() {
   return (
     <div className="max-container section-padding flex flex-col items-center text-center">
       <h1 className="heading-1 max-w-4xl animate-fade-in">
-        <span className="text-primary">AI-Powered</span> Document Review & Signing
+        <AnimatedTextCycle 
+          words={["AI-Powered", "Smart", "Secure", "Quantum-Safe"]}
+          interval={3000}
+          className="text-primary"
+        /> Document Review & Signing
       </h1>
       <p className="mt-6 max-w-2xl text-lg md:text-xl text-tertiary animate-slide-up">
         Review contracts with AI assistance, generate custom signatures, and send secure
