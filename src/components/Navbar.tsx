@@ -1,14 +1,33 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const isMobile = useIsMobile();
+  
+  // Add scroll effect for shadow
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <nav className="bg-white shadow-sm py-4 sticky top-0 z-50">
+    <nav className={`bg-white py-4 sticky top-0 z-50 transition-shadow duration-300 ${
+      isScrolled ? 'shadow-md' : 'shadow-sm'
+    }`}>
       <div className="max-container flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2">
           <div className="h-8 w-8 rounded-md bg-primary flex items-center justify-center">
@@ -58,44 +77,50 @@ export function Navbar() {
 
         {/* Mobile menu button */}
         <button 
-          className="md:hidden"
+          className="md:hidden p-2" 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         >
           {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t mt-4">
+      {/* Mobile menu - improved with smooth transitions */}
+      {isMobile && (
+        <div 
+          className={`fixed inset-x-0 top-[68px] bg-white border-t shadow-lg transform transition-transform duration-300 ease-in-out ${
+            isMenuOpen ? 'translate-y-0' : '-translate-y-full'
+          } md:hidden`}
+          style={{ maxHeight: 'calc(100vh - 68px)', overflowY: 'auto' }}
+        >
           <div className="max-container py-4 space-y-4">
             <Link 
               to="/features" 
-              className="block text-secondary hover:text-primary font-medium py-2"
+              className="block text-secondary hover:text-primary font-medium py-3 px-4 rounded-md hover:bg-secondary-100"
               onClick={() => setIsMenuOpen(false)}
             >
               Features
             </Link>
             <Link 
               to="/pricing" 
-              className="block text-secondary hover:text-primary font-medium py-2"
+              className="block text-secondary hover:text-primary font-medium py-3 px-4 rounded-md hover:bg-secondary-100"
               onClick={() => setIsMenuOpen(false)}
             >
               Pricing
             </Link>
             <Link 
               to="/about" 
-              className="block text-secondary hover:text-primary font-medium py-2"
+              className="block text-secondary hover:text-primary font-medium py-3 px-4 rounded-md hover:bg-secondary-100"
               onClick={() => setIsMenuOpen(false)}
             >
               About
             </Link>
-            <div className="flex flex-col space-y-2 pt-2 border-t">
+            <div className="flex flex-col space-y-3 pt-4 border-t px-4">
               <Link to="/signin" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="outline" className="w-full">Sign In</Button>
+                <Button variant="outline" className="w-full justify-center">Sign In</Button>
               </Link>
               <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
-                <Button className="w-full">Get Started</Button>
+                <Button className="w-full justify-center">Get Started</Button>
               </Link>
             </div>
           </div>

@@ -7,13 +7,13 @@ import { Footer } from '@/components/Footer';
 
 const NotFound = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col overflow-x-hidden">
       <Navbar />
-      <main className="flex-grow flex items-center justify-center">
-        <div className="text-center py-20">
-          <h1 className="text-7xl font-bold text-primary mb-4">404</h1>
-          <h2 className="text-3xl font-bold mb-6">Page Not Found</h2>
-          <p className="text-tertiary max-w-md mx-auto mb-8">
+      <main className="flex-grow flex items-center justify-center p-4">
+        <div className="text-center py-12 md:py-20">
+          <h1 className="text-5xl md:text-7xl font-bold text-primary mb-4">404</h1>
+          <h2 className="text-2xl md:text-3xl font-bold mb-6">Page Not Found</h2>
+          <p className="text-tertiary max-w-md mx-auto mb-8 px-4">
             The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
           </p>
           <Link to="/">
@@ -24,6 +24,6 @@ const NotFound = () => {
       <Footer />
     </div>
   );
-};
+}
 
 export default NotFound;
