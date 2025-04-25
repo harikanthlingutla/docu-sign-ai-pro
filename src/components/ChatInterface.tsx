@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { SendHorizonal, Loader2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { SendHorizonal, Loader2, Bot, User, FileText } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -59,12 +60,16 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-full rounded-lg overflow-hidden border">
-      <div className="bg-secondary p-4 text-white">
-        <h3 className="font-semibold">Document Assistant</h3>
-      </div>
-      
-      <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-secondary-100">
+    <div className="flex flex-col h-[600px] overflow-hidden">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white">
+        <div className="bg-secondary-100 rounded-md p-3 text-xs text-secondary mb-6">
+          <div className="flex items-center gap-2 text-primary mb-2">
+            <FileText className="h-4 w-4" />
+            <span className="font-medium">System</span>
+          </div>
+          Document analyzer ready. Upload a document or ask questions about your current document.
+        </div>
+        
         {messages.map((message) => (
           <div
             key={message.id}
@@ -72,23 +77,37 @@ export function ChatInterface() {
               message.sender === 'user' ? 'justify-end' : 'justify-start'
             }`}
           >
-            <div
-              className={`max-w-[80%] rounded-lg p-3 ${
-                message.sender === 'user'
+            <div className={`flex max-w-[80%] gap-3 ${
+              message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'
+            }`}>
+              <div className={`h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                message.sender === 'user' 
                   ? 'bg-primary text-white'
-                  : 'bg-white border'
-              }`}
-            >
-              <p className="text-sm">{message.text}</p>
+                  : 'bg-secondary-200 text-secondary'
+              }`}>
+                {message.sender === 'user' ? (
+                  <User className="h-4 w-4" />
+                ) : (
+                  <Bot className="h-4 w-4" />
+                )}
+              </div>
+              
               <div
-                className={`text-xs mt-1 ${
-                  message.sender === 'user' ? 'text-primary-200' : 'text-tertiary'
+                className={`rounded-lg p-3 ${
+                  message.sender === 'user'
+                    ? 'bg-primary-100 border border-primary-200 text-secondary'
+                    : 'bg-secondary-100 border border-secondary-200'
                 }`}
               >
-                {message.timestamp.toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+                <p className="text-sm">{message.text}</p>
+                <div
+                  className={`text-xs mt-1 text-tertiary`}
+                >
+                  {message.timestamp.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </div>
               </div>
             </div>
           </div>
@@ -96,20 +115,25 @@ export function ChatInterface() {
         
         {isLoading && (
           <div className="flex justify-start">
-            <div className="max-w-[80%] rounded-lg p-3 bg-white border">
-              <div className="flex items-center space-x-2">
-                <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                <p className="text-sm text-tertiary">Analyzing document...</p>
+            <div className="flex gap-3">
+              <div className="h-8 w-8 rounded-full bg-secondary-200 flex items-center justify-center flex-shrink-0">
+                <Bot className="h-4 w-4 text-secondary" />
+              </div>
+              
+              <div className="max-w-[80%] rounded-lg p-3 bg-secondary-100 border border-secondary-200">
+                <div className="flex items-center space-x-2">
+                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                  <p className="text-sm text-tertiary">Analyzing document...</p>
+                </div>
               </div>
             </div>
           </div>
         )}
       </div>
       
-      <div className="p-4 border-t bg-white">
+      <div className="p-4 border-t bg-secondary-100">
         <div className="flex space-x-2">
-          <input
-            type="text"
+          <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {
@@ -119,7 +143,7 @@ export function ChatInterface() {
               }
             }}
             placeholder="Ask about your document..."
-            className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+            className="flex-1 bg-white"
           />
           <Button
             onClick={handleSendMessage}

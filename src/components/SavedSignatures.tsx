@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Download, Copy, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 interface SavedSignature {
   id: string;
@@ -45,45 +46,89 @@ export function SavedSignatures() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Your Saved Signatures</CardTitle>
-          <CardDescription>Manage your saved signatures or create a new one</CardDescription>
+          <CardTitle>Signature Library</CardTitle>
+          <CardDescription>Your saved signatures for document signing</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {demoSignatures.map((signature) => (
-              <Card key={signature.id} className="overflow-hidden">
-                <div className="p-4 border-b">
-                  <div className="flex justify-between items-center mb-2">
-                    <h3 className="font-medium text-sm">{signature.name}</h3>
-                    <span className="text-xs text-muted-foreground">Created: {signature.dateCreated}</span>
-                  </div>
-                  <div className="border rounded-md h-20 flex items-center justify-center overflow-hidden">
-                    <img 
-                      src={signature.previewUrl} 
-                      alt={signature.name}
-                      className="max-w-full max-h-full object-contain" 
-                    />
-                  </div>
-                </div>
-                <CardFooter className="p-2 bg-secondary-50 flex justify-between">
-                  <Button variant="ghost" size="sm" onClick={() => handleCopy(signature.id)}>
-                    <Copy className="h-4 w-4 mr-1" />
-                    Copy
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleDownload(signature.id)}>
-                    <Download className="h-4 w-4 mr-1" />
-                    Download
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleDelete(signature.id)}>
-                    <Trash2 className="h-4 w-4 mr-1" />
-                    Delete
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Preview</TableHead>
+                <TableHead>Date Created</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {demoSignatures.map((signature) => (
+                <TableRow key={signature.id}>
+                  <TableCell className="font-medium">{signature.name}</TableCell>
+                  <TableCell>
+                    <div className="border rounded-md h-12 flex items-center justify-center overflow-hidden max-w-[200px]">
+                      <img 
+                        src={signature.previewUrl} 
+                        alt={signature.name}
+                        className="max-w-full max-h-full object-contain" 
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell>{signature.dateCreated}</TableCell>
+                  <TableCell>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="icon" onClick={() => handleCopy(signature.id)} title="Copy">
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                      <Button variant="outline" size="icon" onClick={() => handleDownload(signature.id)} title="Download">
+                        <Download className="h-4 w-4" />
+                      </Button>
+                      <Button variant="outline" size="icon" onClick={() => handleDelete(signature.id)} title="Delete">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
+        <CardFooter>
+          <p className="text-xs text-tertiary">Signatures are securely stored with post-quantum encryption</p>
+        </CardFooter>
       </Card>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {demoSignatures.map((signature) => (
+          <Card key={signature.id} className="overflow-hidden">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">{signature.name}</CardTitle>
+              <CardDescription>Created: {signature.dateCreated}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="border rounded-md h-20 flex items-center justify-center overflow-hidden">
+                <img 
+                  src={signature.previewUrl} 
+                  alt={signature.name}
+                  className="max-w-full max-h-full object-contain" 
+                />
+              </div>
+            </CardContent>
+            <CardFooter className="bg-secondary-100 justify-between py-2">
+              <Button variant="ghost" size="sm" onClick={() => handleCopy(signature.id)}>
+                <Copy className="h-4 w-4 mr-1" />
+                Copy
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => handleDownload(signature.id)}>
+                <Download className="h-4 w-4 mr-1" />
+                Download
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => handleDelete(signature.id)}>
+                <Trash2 className="h-4 w-4 mr-1" />
+                Delete
+              </Button>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }

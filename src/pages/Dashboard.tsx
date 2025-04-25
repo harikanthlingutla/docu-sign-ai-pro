@@ -1,18 +1,31 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { DocumentUpload } from '@/components/DocumentUpload';
 import { SignaturesTab } from '@/components/SignaturesTab';
 import { ChatInterface } from '@/components/ChatInterface';
-import { FileText, MessageSquare, Pencil, Shield, User, LogOut } from 'lucide-react';
+import { SecurityTab } from '@/components/SecurityTab';
+import { useResponsive } from '@/hooks/use-responsive';
+import { FileText, MessageSquare, Pencil, Shield, User, LogOut, Menu, X } from 'lucide-react';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('documents');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { isMdAndUp } = useResponsive();
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   return (
-    <div className="min-h-screen bg-secondary-100 flex">
-      {/* Sidebar */}
-      <div className="w-64 bg-white border-r hidden md:block">
-        <div className="p-4 border-b">
+    <div className="min-h-screen bg-secondary-100 flex overflow-x-hidden">
+      {/* Sidebar - Desktop */}
+      <aside 
+        className={`fixed md:relative z-30 md:z-auto h-full transition-all duration-300 ease-in-out transform 
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        w-72 bg-[#1E293B] text-white md:flex flex-col shadow-lg`}
+      >
+        <div className="p-4 border-b border-secondary-600">
           <div className="flex items-center space-x-2">
             <div className="h-8 w-8 rounded-md bg-primary flex items-center justify-center">
               <svg
@@ -33,229 +46,229 @@ const Dashboard = () => {
                 <path d="M12 2v6" />
               </svg>
             </div>
-            <span className="text-secondary font-display font-bold text-xl">SignThatDoc</span>
+            <span className="text-white font-display font-bold text-xl">SignThatDoc</span>
+            
+            {/* Close button for mobile */}
+            <button 
+              onClick={toggleSidebar}
+              className="ml-auto text-white md:hidden"
+            >
+              <X size={20} />
+            </button>
           </div>
         </div>
         
-        <div className="py-4">
+        <nav className="py-6 flex-1 overflow-y-auto">
+          <div className="px-3 mb-4">
+            <p className="text-xs uppercase text-gray-400 font-medium tracking-wider px-3 mb-2">Document Tools</p>
+          </div>
+          
           <button
-            className={`w-full flex items-center space-x-3 px-4 py-3 text-left ${
+            className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors ${
               activeTab === 'documents'
-                ? 'bg-primary-100 text-primary font-medium'
-                : 'text-secondary hover:bg-secondary-100'
+                ? 'bg-secondary-600 text-white border-l-2 border-primary'
+                : 'text-gray-300 hover:bg-secondary-700'
             }`}
-            onClick={() => setActiveTab('documents')}
+            onClick={() => {
+              setActiveTab('documents');
+              if (!isMdAndUp) setSidebarOpen(false);
+            }}
           >
             <FileText className="h-5 w-5" />
             <span>Documents</span>
           </button>
           
           <button
-            className={`w-full flex items-center space-x-3 px-4 py-3 text-left ${
+            className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors ${
               activeTab === 'signatures'
-                ? 'bg-primary-100 text-primary font-medium'
-                : 'text-secondary hover:bg-secondary-100'
+                ? 'bg-secondary-600 text-white border-l-2 border-primary'
+                : 'text-gray-300 hover:bg-secondary-700'
             }`}
-            onClick={() => setActiveTab('signatures')}
+            onClick={() => {
+              setActiveTab('signatures');
+              if (!isMdAndUp) setSidebarOpen(false);
+            }}
           >
             <Pencil className="h-5 w-5" />
             <span>Signatures</span>
           </button>
           
+          <div className="px-3 my-4">
+            <p className="text-xs uppercase text-gray-400 font-medium tracking-wider px-3 mb-2">AI & Security</p>
+          </div>
+          
           <button
-            className={`w-full flex items-center space-x-3 px-4 py-3 text-left ${
+            className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors ${
               activeTab === 'assistant'
-                ? 'bg-primary-100 text-primary font-medium'
-                : 'text-secondary hover:bg-secondary-100'
+                ? 'bg-secondary-600 text-white border-l-2 border-primary'
+                : 'text-gray-300 hover:bg-secondary-700'
             }`}
-            onClick={() => setActiveTab('assistant')}
+            onClick={() => {
+              setActiveTab('assistant');
+              if (!isMdAndUp) setSidebarOpen(false);
+            }}
           >
             <MessageSquare className="h-5 w-5" />
             <span>AI Assistant</span>
           </button>
           
           <button
-            className={`w-full flex items-center space-x-3 px-4 py-3 text-left ${
+            className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors ${
               activeTab === 'security'
-                ? 'bg-primary-100 text-primary font-medium'
-                : 'text-secondary hover:bg-secondary-100'
+                ? 'bg-secondary-600 text-white border-l-2 border-primary'
+                : 'text-gray-300 hover:bg-secondary-700'
             }`}
-            onClick={() => setActiveTab('security')}
+            onClick={() => {
+              setActiveTab('security');
+              if (!isMdAndUp) setSidebarOpen(false);
+            }}
           >
             <Shield className="h-5 w-5" />
             <span>Security Keys</span>
           </button>
-        </div>
+        </nav>
         
-        <div className="absolute bottom-0 w-64 border-t">
+        <div className="border-t border-secondary-600 mt-auto">
           <div className="p-4">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="h-10 w-10 rounded-full bg-secondary-200 flex items-center justify-center">
-                <User className="h-5 w-5 text-secondary" />
+              <div className="h-10 w-10 rounded-full bg-secondary-700 flex items-center justify-center">
+                <User className="h-5 w-5 text-gray-300" />
               </div>
               <div>
-                <div className="font-medium">John Doe</div>
-                <div className="text-sm text-tertiary">john@example.com</div>
+                <div className="font-medium text-white">John Doe</div>
+                <div className="text-sm text-gray-400">john@example.com</div>
               </div>
             </div>
-            <Button variant="outline" className="w-full flex items-center justify-center">
+            <Button variant="outline" className="w-full flex items-center justify-center bg-transparent border-gray-600 text-gray-300 hover:bg-secondary-700 hover:text-white">
               <LogOut className="h-4 w-4 mr-2" />
               Sign Out
             </Button>
           </div>
         </div>
-      </div>
+      </aside>
 
-      {/* Mobile header */}
-      <div className="md:hidden w-full fixed top-0 z-50 bg-white border-b">
-        <div className="flex justify-between items-center p-4">
-          <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-md bg-primary flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-white"
-              >
-                <path d="M10 13.5V10h-7v3.5a1.5 1.5 0 0 0 3 0V12a1 1 0 0 1 2 0v1.5a1.5 1.5 0 0 0 3 0Z" />
-                <path d="M10 13.5V10h7v3.5a1.5 1.5 0 0 1-3 0V12a1 1 0 0 0-2 0v1.5a1.5 1.5 0 0 1-3 0Z" />
-                <path d="M21 19H3" />
-                <path d="M12 2v6" />
-              </svg>
-            </div>
-            <span className="text-secondary font-display font-bold text-xl">SignThatDoc</span>
+      {/* Main content area */}
+      <div className="flex-1 flex flex-col">
+        {/* Top bar */}
+        <div className="bg-[#1E293B] text-white p-4 flex items-center justify-between shadow-md">
+          {/* Menu button for mobile */}
+          <button 
+            onClick={toggleSidebar} 
+            className="text-white md:hidden"
+          >
+            <Menu size={24} />
+          </button>
+          
+          <div className="ml-4 md:ml-0">
+            <h1 className="text-lg font-bold">
+              {activeTab === 'documents' && 'Documents'}
+              {activeTab === 'signatures' && 'Signatures'}
+              {activeTab === 'assistant' && 'AI Assistant'}
+              {activeTab === 'security' && 'Security Keys'}
+            </h1>
           </div>
           
-          <div className="flex items-center space-x-1">
-            <div className="h-8 w-8 rounded-full bg-secondary-200 flex items-center justify-center">
-              <User className="h-4 w-4 text-secondary" />
+          <div className="flex items-center space-x-2">
+            <div className="h-8 w-8 rounded-full bg-secondary-700 flex items-center justify-center md:hidden">
+              <User className="h-4 w-4 text-gray-300" />
             </div>
           </div>
         </div>
         
-        <div className="flex border-t">
-          <button
-            className={`flex-1 flex flex-col items-center py-2 ${
-              activeTab === 'documents'
-                ? 'text-primary'
-                : 'text-tertiary'
-            }`}
-            onClick={() => setActiveTab('documents')}
-          >
-            <FileText className="h-5 w-5" />
-            <span className="text-xs mt-1">Documents</span>
-          </button>
-          
-          <button
-            className={`flex-1 flex flex-col items-center py-2 ${
-              activeTab === 'signatures'
-                ? 'text-primary'
-                : 'text-tertiary'
-            }`}
-            onClick={() => setActiveTab('signatures')}
-          >
-            <Pencil className="h-5 w-5" />
-            <span className="text-xs mt-1">Signatures</span>
-          </button>
-          
-          <button
-            className={`flex-1 flex flex-col items-center py-2 ${
-              activeTab === 'assistant'
-                ? 'text-primary'
-                : 'text-tertiary'
-            }`}
-            onClick={() => setActiveTab('assistant')}
-          >
-            <MessageSquare className="h-5 w-5" />
-            <span className="text-xs mt-1">Assistant</span>
-          </button>
-          
-          <button
-            className={`flex-1 flex flex-col items-center py-2 ${
-              activeTab === 'security'
-                ? 'text-primary'
-                : 'text-tertiary'
-            }`}
-            onClick={() => setActiveTab('security')}
-          >
-            <Shield className="h-5 w-5" />
-            <span className="text-xs mt-1">Security</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Main content */}
-      <div className="flex-1 md:p-8 p-4 md:pt-8 pt-28">
-        <div className="max-w-5xl mx-auto">
-          {activeTab === 'documents' && (
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">My Documents</h1>
-                <Button>Upload Document</Button>
-              </div>
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <DocumentUpload />
-              </div>
-            </div>
-          )}
-          
-          {activeTab === 'signatures' && (
-            <SignaturesTab />
-          )}
-          
-          {activeTab === 'assistant' && (
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">AI Document Assistant</h1>
-              </div>
-              <div className="bg-white rounded-lg shadow-sm h-[600px]">
-                <ChatInterface />
-              </div>
-            </div>
-          )}
-          
-          {activeTab === 'security' && (
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">Security Keys</h1>
-                <Button>Generate New Key</Button>
-              </div>
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <h2 className="text-lg font-semibold mb-4">Quantum-Resistant Cryptographic Keys</h2>
-                <div className="space-y-6">
-                  <div className="bg-secondary-100 p-4 rounded-lg">
-                    <div className="flex justify-between items-center mb-2">
-                      <h3 className="font-medium">CRYSTALS-Dilithium2 Public Key</h3>
-                      <Button variant="outline" size="sm">Copy</Button>
-                    </div>
-                    <div className="bg-white p-3 rounded border border-secondary-200 font-mono text-xs overflow-x-auto">
-                      dil2_pk_0x98a2f5ff937d41c5a7d872f51d34f9cf87c0adabba36435ca5b01a5cacbed3b2...
-                    </div>
-                    <p className="text-xs text-tertiary mt-2">
-                      This is your quantum-resistant public key used for document verification.
-                    </p>
-                  </div>
-                  
+        {/* Content area */}
+        <div className="flex-1 p-4 md:p-6">
+          <div className="max-w-6xl mx-auto">
+            {activeTab === 'documents' && (
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
                   <div>
-                    <h3 className="font-medium mb-2">About Post-Quantum Security</h3>
-                    <p className="text-sm text-tertiary">
-                      Your documents are secured using NIST-approved post-quantum cryptography standards. 
-                      CRYSTALS-Dilithium2 is used for digital signatures, protecting your documents against 
-                      future quantum computing attacks. Your private key never leaves your device.
-                    </p>
+                    <h2 className="text-xl font-bold mb-1">My Documents</h2>
+                    <p className="text-tertiary text-sm">Upload and manage your documents</p>
+                  </div>
+                  <Button>Upload Document</Button>
+                </div>
+                <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
+                  <div className="p-1 bg-secondary-100 border-b">
+                    <div className="flex space-x-1 px-2">
+                      <div className="h-3 w-3 rounded-full bg-red-500"></div>
+                      <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
+                      <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <DocumentUpload />
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+            
+            {activeTab === 'signatures' && (
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-xl font-bold mb-1">Signature Manager</h2>
+                  <p className="text-tertiary text-sm">Create and manage your digital signatures</p>
+                </div>
+                <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
+                  <div className="p-1 bg-secondary-100 border-b">
+                    <div className="flex space-x-1 px-2">
+                      <div className="h-3 w-3 rounded-full bg-red-500"></div>
+                      <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
+                      <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                    </div>
+                  </div>
+                  <SignaturesTab />
+                </div>
+              </div>
+            )}
+            
+            {activeTab === 'assistant' && (
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-xl font-bold mb-1">AI Document Assistant</h2>
+                  <p className="text-tertiary text-sm">Get intelligent insights about your documents</p>
+                </div>
+                <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
+                  <div className="p-1 bg-secondary-100 border-b">
+                    <div className="flex space-x-1 px-2">
+                      <div className="h-3 w-3 rounded-full bg-red-500"></div>
+                      <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
+                      <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                    </div>
+                  </div>
+                  <ChatInterface />
+                </div>
+              </div>
+            )}
+            
+            {activeTab === 'security' && (
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-xl font-bold mb-1">Cryptographic Security</h2>
+                  <p className="text-tertiary text-sm">Quantum-resistant key management</p>
+                </div>
+                <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
+                  <div className="p-1 bg-secondary-100 border-b">
+                    <div className="flex space-x-1 px-2">
+                      <div className="h-3 w-3 rounded-full bg-red-500"></div>
+                      <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
+                      <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                    </div>
+                  </div>
+                  <SecurityTab />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+      
+      {/* Overlay for mobile */}
+      {sidebarOpen && !isMdAndUp && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-20"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
+      )}
     </div>
   );
 };
