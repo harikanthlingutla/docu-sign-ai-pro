@@ -21,7 +21,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-secondary-100 flex overflow-x-hidden">
       {/* Sidebar - Desktop */}
       <aside 
-        className={`fixed md:relative z-30 md:z-auto h-full transition-all duration-300 ease-in-out transform 
+        className={`fixed md:relative z-30 md:z-auto h-screen transition-all duration-300 ease-in-out transform 
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         w-72 bg-[#1E293B] text-white md:flex flex-col shadow-lg`}
       >
@@ -188,16 +188,7 @@ const Dashboard = () => {
                   <Button>Upload Document</Button>
                 </div>
                 <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
-                  <div className="p-1 bg-secondary-100 border-b">
-                    <div className="flex space-x-1 px-2">
-                      <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                      <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                      <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <DocumentUpload />
-                  </div>
+                  <DocumentUpload />
                 </div>
               </div>
             )}
@@ -209,13 +200,6 @@ const Dashboard = () => {
                   <p className="text-tertiary text-sm">Create and manage your digital signatures</p>
                 </div>
                 <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
-                  <div className="p-1 bg-secondary-100 border-b">
-                    <div className="flex space-x-1 px-2">
-                      <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                      <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                      <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                    </div>
-                  </div>
                   <SignaturesTab />
                 </div>
               </div>
@@ -228,13 +212,6 @@ const Dashboard = () => {
                   <p className="text-tertiary text-sm">Get intelligent insights about your documents</p>
                 </div>
                 <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
-                  <div className="p-1 bg-secondary-100 border-b">
-                    <div className="flex space-x-1 px-2">
-                      <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                      <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                      <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                    </div>
-                  </div>
                   <ChatInterface />
                 </div>
               </div>
@@ -247,13 +224,6 @@ const Dashboard = () => {
                   <p className="text-tertiary text-sm">Quantum-resistant key management</p>
                 </div>
                 <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
-                  <div className="p-1 bg-secondary-100 border-b">
-                    <div className="flex space-x-1 px-2">
-                      <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                      <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                      <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                    </div>
-                  </div>
                   <SecurityTab />
                 </div>
               </div>
