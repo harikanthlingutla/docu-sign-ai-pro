@@ -3,6 +3,7 @@ import React from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/components/Hero';
 import { Features } from '@/components/Features';
+import { Pricing } from '@/components/Pricing';
 import { Testimonials } from '@/components/Testimonials';
 import { SecurityFeatures } from '@/components/SecurityFeatures';
 import { CTA } from '@/components/CTA';
@@ -16,6 +17,7 @@ const Index = () => {
         <Hero />
         <Features />
         <SecurityFeatures />
+        <Pricing />
         <Testimonials />
         <CTA />
       </main>
