@@ -78,20 +78,20 @@ const plans: PricingPlan[] = [
 
 export function Pricing() {
   return (
-    <section className="section-padding bg-secondary-50">
-      <div className="max-container text-center">
+    <section className="section-padding bg-secondary-50" id="pricing">
+      <div className="max-container px-2 sm:px-6 text-center">
         <h2 className="heading-2 mb-4">Simple, Honest Pricing</h2>
-        <p className="body-text mb-12 max-w-2xl mx-auto">
+        <p className="body-text mb-8 md:mb-12 max-w-2xl mx-auto">
           Whether you need to sign once or hundreds of times, we've got a plan for you.
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {plans.map((plan) => (
             <Card 
               key={plan.name}
               className={cn(
                 "relative flex flex-col h-full transition-all duration-200 hover:shadow-lg",
-                plan.popular && "border-primary shadow-md scale-105"
+                plan.popular && "border-primary shadow-md md:scale-105"
               )}
             >
               {plan.popular && (
@@ -100,7 +100,7 @@ export function Pricing() {
                 </div>
               )}
               
-              <CardHeader className="text-center pb-0">
+              <CardHeader className="text-center pb-0 pt-6">
                 <div className="flex items-center justify-center mb-4">
                   <CircleDollarSign className="h-8 w-8 text-primary" />
                 </div>
@@ -115,17 +115,17 @@ export function Pricing() {
               </CardHeader>
 
               <CardContent className="flex-grow">
-                <ul className="space-y-3 mt-6">
+                <ul className="space-y-3 mt-4 md:mt-6">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start gap-2">
                       <Check className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                      <span className="text-sm">{feature.text}</span>
+                      <span className="text-sm text-left">{feature.text}</span>
                     </li>
                   ))}
                 </ul>
               </CardContent>
 
-              <CardFooter>
+              <CardFooter className="pt-2 pb-6">
                 <Button 
                   className="w-full"
                   variant={plan.popular ? "default" : "outline"}

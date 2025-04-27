@@ -11,7 +11,7 @@ import { Footer } from '@/components/Footer';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden">
+    <div className="min-h-screen flex flex-col overflow-x-hidden w-full">
       <Navbar />
       <main className="flex-grow">
         <Hero />

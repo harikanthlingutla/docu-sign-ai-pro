@@ -25,10 +25,10 @@ export function Navbar() {
   }, []);
 
   return (
-    <nav className={`bg-white py-4 sticky top-0 z-50 transition-shadow duration-300 ${
+    <nav className={`bg-white py-3 sm:py-4 sticky top-0 z-50 transition-shadow duration-300 ${
       isScrolled ? 'shadow-md' : 'shadow-sm'
     }`}>
-      <div className="max-container flex justify-between items-center">
+      <div className="max-container flex justify-between items-center px-4 sm:px-6">
         <Link to="/" className="flex items-center space-x-2">
           <div className="h-8 w-8 rounded-md bg-primary flex items-center justify-center">
             <svg
@@ -49,7 +49,7 @@ export function Navbar() {
               <path d="M12 2v6" />
             </svg>
           </div>
-          <span className="text-secondary font-display font-bold text-xl">SignThatDoc</span>
+          <span className="text-secondary font-display font-bold text-lg sm:text-xl">SignThatDoc</span>
         </Link>
 
         {/* Desktop menu */}
@@ -88,12 +88,12 @@ export function Navbar() {
       {/* Mobile menu - improved with smooth transitions */}
       {isMobile && (
         <div 
-          className={`fixed inset-x-0 top-[68px] bg-white border-t shadow-lg transform transition-transform duration-300 ease-in-out ${
+          className={`fixed inset-x-0 top-[57px] sm:top-[64px] bg-white border-t shadow-lg transform transition-transform duration-300 ease-in-out ${
             isMenuOpen ? 'translate-y-0' : '-translate-y-full'
-          } md:hidden`}
-          style={{ maxHeight: 'calc(100vh - 68px)', overflowY: 'auto' }}
+          } md:hidden z-40`}
+          style={{ maxHeight: 'calc(100vh - 57px)', overflowY: 'auto' }}
         >
-          <div className="max-container py-4 space-y-4">
+          <div className="max-container py-4 space-y-2 px-4">
             <Link 
               to="/features" 
               className="block text-secondary hover:text-primary font-medium py-3 px-4 rounded-md hover:bg-secondary-100"

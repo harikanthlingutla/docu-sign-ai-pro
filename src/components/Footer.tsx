@@ -8,9 +8,9 @@ export function Footer() {
 
   return (
     <footer className="bg-secondary-100 border-t">
-      <div className="max-container py-8 md:py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1 md:col-span-2">
+      <div className="max-container py-8 md:py-12 px-4 sm:px-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="col-span-2">
             <Link to="/" className="flex items-center space-x-2">
               <div className="h-8 w-8 rounded-md bg-primary flex items-center justify-center">
                 <svg
@@ -61,7 +61,7 @@ export function Footer() {
         
         <div className="border-t mt-8 md:mt-12 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-tertiary text-sm">© 2025 SignThatDoc. All rights reserved.</p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
+          <div className="flex flex-wrap justify-center space-x-4 mt-4 md:mt-0">
             <Link to="/terms" className="text-tertiary hover:text-primary text-sm transition-colors">Terms</Link>
             <Link to="/privacy" className="text-tertiary hover:text-primary text-sm transition-colors">Privacy</Link>
             <Link to="/cookies" className="text-tertiary hover:text-primary text-sm transition-colors">Cookies</Link>
