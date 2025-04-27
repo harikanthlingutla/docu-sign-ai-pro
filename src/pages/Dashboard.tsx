@@ -18,10 +18,10 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-secondary-100 flex overflow-x-hidden">
+    <div className="min-h-screen bg-secondary-100 flex overflow-hidden">
       {/* Sidebar - Desktop */}
       <aside 
-        className={`fixed md:relative z-30 md:z-auto h-screen transition-all duration-300 ease-in-out transform 
+        className={`fixed md:relative z-30 md:z-auto h-full transition-all duration-300 ease-in-out transform 
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         w-72 bg-[#1E293B] text-white md:flex flex-col shadow-lg`}
       >
@@ -148,7 +148,7 @@ const Dashboard = () => {
       </aside>
 
       {/* Main content area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col w-full">
         {/* Top bar */}
         <div className="bg-[#1E293B] text-white p-4 flex items-center justify-between shadow-md">
           {/* Menu button for mobile */}
@@ -176,16 +176,16 @@ const Dashboard = () => {
         </div>
         
         {/* Content area */}
-        <div className="flex-1 p-4 md:p-6">
-          <div className="max-w-6xl mx-auto">
+        <div className="flex-1 p-2 sm:p-4 md:p-6 overflow-x-hidden">
+          <div className="max-w-6xl mx-auto w-full">
             {activeTab === 'documents' && (
               <div className="space-y-6">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                   <div>
                     <h2 className="text-xl font-bold mb-1">My Documents</h2>
                     <p className="text-tertiary text-sm">Upload and manage your documents</p>
                   </div>
-                  <Button>Upload Document</Button>
+                  <Button className="w-full sm:w-auto">Upload Document</Button>
                 </div>
                 <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
                   <DocumentUpload />

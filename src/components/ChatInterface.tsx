@@ -60,8 +60,8 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-[600px] overflow-hidden">
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white">
+    <div className="flex flex-col h-[500px] sm:h-[600px] overflow-hidden">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-4 bg-white">
         <div className="bg-secondary-100 rounded-md p-3 text-xs text-secondary mb-6">
           <div className="flex items-center gap-2 text-primary mb-2">
             <FileText className="h-4 w-4" />
@@ -77,7 +77,7 @@ export function ChatInterface() {
               message.sender === 'user' ? 'justify-end' : 'justify-start'
             }`}
           >
-            <div className={`flex max-w-[80%] gap-3 ${
+            <div className={`flex max-w-[90%] sm:max-w-[80%] gap-2 sm:gap-3 ${
               message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'
             }`}>
               <div className={`h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 ${
@@ -99,7 +99,7 @@ export function ChatInterface() {
                     : 'bg-secondary-100 border border-secondary-200'
                 }`}
               >
-                <p className="text-sm">{message.text}</p>
+                <p className="text-sm break-words">{message.text}</p>
                 <div
                   className={`text-xs mt-1 text-tertiary`}
                 >
@@ -115,12 +115,12 @@ export function ChatInterface() {
         
         {isLoading && (
           <div className="flex justify-start">
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3">
               <div className="h-8 w-8 rounded-full bg-secondary-200 flex items-center justify-center flex-shrink-0">
                 <Bot className="h-4 w-4 text-secondary" />
               </div>
               
-              <div className="max-w-[80%] rounded-lg p-3 bg-secondary-100 border border-secondary-200">
+              <div className="max-w-[90%] sm:max-w-[80%] rounded-lg p-3 bg-secondary-100 border border-secondary-200">
                 <div className="flex items-center space-x-2">
                   <Loader2 className="h-4 w-4 animate-spin text-primary" />
                   <p className="text-sm text-tertiary">Analyzing document...</p>
@@ -131,8 +131,8 @@ export function ChatInterface() {
         )}
       </div>
       
-      <div className="p-4 border-t bg-secondary-100">
-        <div className="flex space-x-2">
+      <div className="p-3 sm:p-4 border-t bg-secondary-100">
+        <div className="flex gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}

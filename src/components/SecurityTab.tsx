@@ -17,17 +17,17 @@ export function SecurityTab() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-3 sm:p-6">
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <h3 className="text-lg font-semibold">Quantum-Resistant Cryptographic Keys</h3>
-          <Button variant="default" onClick={handleGenerateKey}>
+          <Button variant="default" onClick={handleGenerateKey} className="w-full sm:w-auto">
             <RefreshCw className="h-4 w-4 mr-2" />
             Generate New Key
           </Button>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card className="border border-secondary-200">
             <CardHeader className="pb-2">
               <CardTitle className="text-base">CRYSTALS-Dilithium2 Public Key</CardTitle>
@@ -35,11 +35,11 @@ export function SecurityTab() {
             </CardHeader>
             <CardContent>
               <div className="font-mono text-xs p-3 bg-secondary-100 rounded border border-secondary-200 overflow-x-auto">
-                <pre className="whitespace-pre-wrap">dil2_pk_0x98a2f5ff937d41c5a7d872f51d34f9cf87c0adabba36435ca5b01a5cacbed3b2389d0fd525ed13a32548c9d5c18c52bdd1585adc4a461f6e8baa64aa7d42e32</pre>
+                <pre className="whitespace-pre-wrap break-all">dil2_pk_0x98a2f5ff937d41c5a7d872f51d34f9cf87c0adabba36435ca5b01a5cacbed3b2389d0fd525ed13a32548c9d5c18c52bdd1585adc4a461f6e8baa64aa7d42e32</pre>
               </div>
             </CardContent>
             <CardFooter className="pt-2">
-              <Button variant="outline" size="sm" onClick={handleCopy}>
+              <Button variant="outline" size="sm" onClick={handleCopy} className="w-full sm:w-auto">
                 <Copy className="h-3 w-3 mr-2" />
                 Copy Public Key
               </Button>
@@ -53,7 +53,7 @@ export function SecurityTab() {
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-full bg-secondary-100 flex items-center justify-center">
+                <div className="h-12 w-12 rounded-full bg-secondary-100 flex items-center justify-center flex-shrink-0">
                   <Shield className="h-6 w-6 text-primary" />
                 </div>
                 <div>
@@ -82,7 +82,7 @@ export function SecurityTab() {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="p-4 bg-secondary-100 rounded-md">
                 <h5 className="font-medium mb-1">Signature Algorithm</h5>
                 <p className="text-xs text-tertiary">CRYSTALS-Dilithium2</p>
