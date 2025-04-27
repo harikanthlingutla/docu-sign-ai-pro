@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { DocumentUpload } from '@/components/DocumentUpload';
 import { SignaturesTab } from '@/components/SignaturesTab';
 import { ChatInterface } from '@/components/ChatInterface';
 import { SecurityTab } from '@/components/SecurityTab';
+import { ProfileTab } from '@/components/ProfileTab';
 import { useResponsive } from '@/hooks/use-responsive';
 import { FileText, MessageSquare, Pencil, Shield, User, LogOut, Menu, X } from 'lucide-react';
 
@@ -48,7 +48,6 @@ const Dashboard = () => {
             </div>
             <span className="text-white font-display font-bold text-xl">SignThatDoc</span>
             
-            {/* Close button for mobile */}
             <button 
               onClick={toggleSidebar}
               className="ml-auto text-white md:hidden"
@@ -126,6 +125,21 @@ const Dashboard = () => {
             <Shield className="h-5 w-5" />
             <span>Security Keys</span>
           </button>
+          
+          <button
+            className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors ${
+              activeTab === 'profile'
+                ? 'bg-secondary-600 text-white border-l-2 border-primary'
+                : 'text-gray-300 hover:bg-secondary-700'
+            }`}
+            onClick={() => {
+              setActiveTab('profile');
+              if (!isMdAndUp) setSidebarOpen(false);
+            }}
+          >
+            <User className="h-5 w-5" />
+            <span>Profile</span>
+          </button>
         </nav>
         
         <div className="border-t border-secondary-600 mt-auto">
@@ -147,11 +161,8 @@ const Dashboard = () => {
         </div>
       </aside>
 
-      {/* Main content area */}
       <div className="flex-1 flex flex-col w-full">
-        {/* Top bar */}
         <div className="bg-[#1E293B] text-white p-4 flex items-center justify-between shadow-md">
-          {/* Menu button for mobile */}
           <button 
             onClick={toggleSidebar} 
             className="text-white md:hidden"
@@ -165,6 +176,7 @@ const Dashboard = () => {
               {activeTab === 'signatures' && 'Signatures'}
               {activeTab === 'assistant' && 'AI Assistant'}
               {activeTab === 'security' && 'Security Keys'}
+              {activeTab === 'profile' && 'My Profile'}
             </h1>
           </div>
           
@@ -175,7 +187,6 @@ const Dashboard = () => {
           </div>
         </div>
         
-        {/* Content area */}
         <div className="flex-1 p-2 sm:p-4 md:p-6 overflow-x-hidden">
           <div className="max-w-6xl mx-auto w-full">
             {activeTab === 'documents' && (
@@ -228,11 +239,16 @@ const Dashboard = () => {
                 </div>
               </div>
             )}
+            
+            {activeTab === 'profile' && (
+              <div className="space-y-6">
+                <ProfileTab />
+              </div>
+            )}
           </div>
         </div>
       </div>
       
-      {/* Overlay for mobile */}
       {sidebarOpen && !isMdAndUp && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-20"
