@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { FileText, Edit } from 'lucide-react';
+import { FileText, Edit, Pen } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const DocumentUpload = () => {
@@ -30,7 +30,7 @@ export const DocumentUpload = () => {
             <FileText className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h3 className="font-medium">Document Management</h3>
+            <h3 className="font-medium">My Documents</h3>
             <p className="text-sm text-tertiary">Upload and manage your documents</p>
           </div>
         </div>
@@ -63,7 +63,13 @@ export const DocumentUpload = () => {
                       <Edit className="h-4 w-4 mr-1" />
                       <span className="hidden sm:inline">Edit</span>
                     </Button>
-                    <Button variant="outline" size="sm">View</Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => navigate(`/editor?id=${doc.id}&name=${doc.name}&view=true`)}
+                    >
+                      View
+                    </Button>
                   </div>
                 </td>
               </tr>

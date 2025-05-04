@@ -191,12 +191,9 @@ const Dashboard = () => {
           <div className="max-w-6xl mx-auto w-full">
             {activeTab === 'documents' && (
               <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-                  <div>
-                    <h2 className="text-xl font-bold mb-1">My Documents</h2>
-                    <p className="text-tertiary text-sm">Upload and manage your documents</p>
-                  </div>
-                  <Button className="w-full sm:w-auto">Upload Document</Button>
+                <div>
+                  <h2 className="text-xl font-bold mb-1">My Documents</h2>
+                  <p className="text-tertiary text-sm">Upload and manage your documents</p>
                 </div>
                 <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
                   <DocumentUpload />

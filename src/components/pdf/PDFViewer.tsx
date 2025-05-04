@@ -5,6 +5,8 @@ import type { TPointerEventInfo, TPointerEvent } from 'fabric';
 import * as pdfjsLib from 'pdfjs-dist';
 import { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist/types/src/display/api';
 import { Loader2, Minus, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { SignatureDialog } from './SignatureDialog';
 
 // Set up PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
@@ -26,6 +28,8 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [scale, setScale] = useState<number>(1.5);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [signatureDialogOpen, setSignatureDialogOpen] = useState<boolean>(false);
+  const [activeCanvas, setActiveCanvas] = useState<{canvas: Canvas, pageIndex: number} | null>(null);
 
   // Load the PDF document
   useEffect(() => {
@@ -143,6 +147,11 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         canvas.freeDrawingBrush.width = 2;
         canvas.freeDrawingBrush.color = '#000000';
       }
+      
+      // Open signature dialog if signature tool is selected
+      if (currentTool === 'signature') {
+        // We don't automatically open the dialog here, it will be triggered on canvas click
+      }
     });
   }, [currentTool]);
 
@@ -200,7 +209,35 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
       });
       canvas.add(text);
       canvas.renderAll();
+    } else if (currentTool === 'signature') {
+      // Store the active canvas and open signature dialog
+      setActiveCanvas({ canvas, pageIndex });
+      setSignatureDialogOpen(true);
     }
+  };
+
+  // Add signature to the document
+  const handleAddSignature = (signatureDataUrl: string) => {
+    if (!activeCanvas) return;
+
+    // Create an image from the signature data URL
+    fabric.Image.fromURL(signatureDataUrl, (img) => {
+      // Position the signature where the user clicked
+      img.set({
+        left: activeCanvas.canvas.width! / 2 - 100,
+        top: activeCanvas.canvas.height! / 2 - 50,
+        scaleX: 0.5,
+        scaleY: 0.5,
+        selectable: true,
+        evented: true,
+      });
+      
+      activeCanvas.canvas.add(img);
+      activeCanvas.canvas.renderAll();
+      
+      // Close the dialog
+      setSignatureDialogOpen(false);
+    });
   };
 
   // Handle zoom in/out
@@ -245,45 +282,13 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
           <div ref={containerRef} className="pdf-container"></div>
         )}
       </div>
-    </div>
-  );
-};
 
-// Simple Button component
-const Button = ({ 
-  children, 
-  variant = 'default', 
-  size = 'default', 
-  onClick, 
-  disabled 
-}: { 
-  children: React.ReactNode;
-  variant?: 'default' | 'outline';
-  size?: 'default' | 'sm';
-  onClick?: () => void;
-  disabled?: boolean;
-}) => {
-  let className = 'inline-flex items-center justify-center rounded-md font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none';
-  
-  if (variant === 'default') {
-    className += ' bg-primary text-white hover:bg-primary-600';
-  } else if (variant === 'outline') {
-    className += ' border border-input bg-background hover:bg-accent hover:text-accent-foreground';
-  }
-  
-  if (size === 'default') {
-    className += ' h-10 py-2 px-4 text-sm';
-  } else if (size === 'sm') {
-    className += ' h-8 px-2 text-xs';
-  }
-  
-  return (
-    <button 
-      className={className}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {children}
-    </button>
+      {/* Signature dialog */}
+      <SignatureDialog 
+        open={signatureDialogOpen} 
+        onOpenChange={setSignatureDialogOpen} 
+        onAddSignature={handleAddSignature}
+      />
+    </div>
   );
 };
