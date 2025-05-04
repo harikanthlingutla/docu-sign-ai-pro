@@ -219,23 +219,29 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     if (!activeCanvas) return;
 
     // Create an image from the signature data URL
-    FabricImage.fromURL(signatureDataUrl, (img) => {
-      // Position the signature where the user clicked
-      img.set({
-        left: activeCanvas.canvas.width! / 2 - 100,
-        top: activeCanvas.canvas.height! / 2 - 50,
-        scaleX: 0.5,
-        scaleY: 0.5,
-        selectable: true,
-        evented: true,
-      });
-      
-      activeCanvas.canvas.add(img);
-      activeCanvas.canvas.renderAll();
-      
-      // Close the dialog
-      setSignatureDialogOpen(false);
-    });
+    FabricImage.fromURL(
+      signatureDataUrl, 
+      {
+        // Optional configuration options can go here
+      },
+      (img) => {
+        // Position the signature where the user clicked
+        img.set({
+          left: activeCanvas.canvas.width! / 2 - 100,
+          top: activeCanvas.canvas.height! / 2 - 50,
+          scaleX: 0.5,
+          scaleY: 0.5,
+          selectable: true,
+          evented: true,
+        });
+        
+        activeCanvas.canvas.add(img);
+        activeCanvas.canvas.renderAll();
+        
+        // Close the dialog
+        setSignatureDialogOpen(false);
+      }
+    );
   };
 
   // Handle zoom in/out
