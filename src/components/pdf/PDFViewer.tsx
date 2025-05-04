@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Canvas, Rect, Textbox, TEvent } from 'fabric';
+import { Canvas, Rect, Textbox } from 'fabric';
+import type { TPointerEventInfo, TPointerEvent } from 'fabric';
 import * as pdfjsLib from 'pdfjs-dist';
 import { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist/types/src/display/api';
 import { Loader2, Minus, Plus } from 'lucide-react';
@@ -147,17 +148,17 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 
   // Set up Fabric.js canvas event handlers
   const setupFabricEvents = (canvas: Canvas, pageIndex: number) => {
-    canvas.on('mouse:down', (opt: TEvent<MouseEvent>) => {
-      handleCanvasMouseDown(canvas, opt, pageIndex);
+    canvas.on('mouse:down', (options) => {
+      handleCanvasMouseDown(canvas, options, pageIndex);
     });
 
     // Additional event handlers can be added here
   };
 
-  const handleCanvasMouseDown = (canvas: Canvas, opt: TEvent<MouseEvent>, pageIndex: number) => {
-    if (!opt.pointer) return;
-
-    const pointer = opt.pointer;
+  const handleCanvasMouseDown = (canvas: Canvas, options: TPointerEventInfo<TPointerEvent>, pageIndex: number) => {
+    // Get the pointer position from the event
+    const pointer = options.absolutePointer || canvas.getPointer(options.e);
+    if (!pointer) return;
 
     if (currentTool === 'highlight') {
       // Create a semi-transparent yellow rectangle for highlighting
