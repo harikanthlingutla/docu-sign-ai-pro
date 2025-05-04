@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -69,6 +68,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
       const dataUrl = fabricCanvasRef.current.toDataURL({
         format: 'png',
         quality: 1,
+        multiplier: 1
       });
       onAddSignature(dataUrl);
     } else if (activeTab === 'type' && typedName) {

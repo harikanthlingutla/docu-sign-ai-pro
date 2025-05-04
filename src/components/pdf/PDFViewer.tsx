@@ -1,7 +1,5 @@
-
 import React, { useEffect, useRef, useState } from 'react';
-import { Canvas, Rect, Textbox } from 'fabric';
-import type { TPointerEventInfo, TPointerEvent } from 'fabric';
+import { Canvas, Rect, Textbox, Image as FabricImage, type TPointerEventInfo, type TPointerEvent } from 'fabric';
 import * as pdfjsLib from 'pdfjs-dist';
 import { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist/types/src/display/api';
 import { Loader2, Minus, Plus } from 'lucide-react';
@@ -157,7 +155,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 
   // Set up Fabric.js canvas event handlers
   const setupFabricEvents = (canvas: Canvas, pageIndex: number) => {
-    canvas.on('mouse:down', (options) => {
+    canvas.on('mouse:down', (options: TPointerEventInfo<TPointerEvent>) => {
       handleCanvasMouseDown(canvas, options, pageIndex);
     });
 
@@ -221,7 +219,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     if (!activeCanvas) return;
 
     // Create an image from the signature data URL
-    fabric.Image.fromURL(signatureDataUrl, (img) => {
+    FabricImage.fromURL(signatureDataUrl, (img) => {
       // Position the signature where the user clicked
       img.set({
         left: activeCanvas.canvas.width! / 2 - 100,
