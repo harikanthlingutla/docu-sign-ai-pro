@@ -1,8 +1,9 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Canvas, Circle, IEvent } from 'fabric';
+import { Canvas, Rect, Textbox, TEvent } from 'fabric';
 import * as pdfjsLib from 'pdfjs-dist';
 import { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist/types/src/display/api';
+import { Loader2, Minus, Plus } from 'lucide-react';
 
 // Set up PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
@@ -146,21 +147,21 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
 
   // Set up Fabric.js canvas event handlers
   const setupFabricEvents = (canvas: Canvas, pageIndex: number) => {
-    canvas.on('mouse:down', (opt: IEvent<MouseEvent>) => {
+    canvas.on('mouse:down', (opt: TEvent<MouseEvent>) => {
       handleCanvasMouseDown(canvas, opt, pageIndex);
     });
 
     // Additional event handlers can be added here
   };
 
-  const handleCanvasMouseDown = (canvas: Canvas, opt: IEvent<MouseEvent>, pageIndex: number) => {
+  const handleCanvasMouseDown = (canvas: Canvas, opt: TEvent<MouseEvent>, pageIndex: number) => {
     if (!opt.pointer) return;
 
     const pointer = opt.pointer;
 
     if (currentTool === 'highlight') {
       // Create a semi-transparent yellow rectangle for highlighting
-      const rect = new fabric.Rect({
+      const rect = new Rect({
         left: pointer.x,
         top: pointer.y,
         width: 100,
@@ -173,7 +174,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
       canvas.renderAll();
     } else if (currentTool === 'redact') {
       // Create a black rectangle for redaction
-      const rect = new fabric.Rect({
+      const rect = new Rect({
         left: pointer.x,
         top: pointer.y,
         width: 100,
@@ -186,7 +187,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
       canvas.renderAll();
     } else if (currentTool === 'text') {
       // Create a text box
-      const text = new fabric.Textbox('Add text here', {
+      const text = new Textbox('Add text here', {
         left: pointer.x,
         top: pointer.y,
         fontFamily: 'Arial',
@@ -220,7 +221,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
           onClick={handleZoomOut}
           disabled={scale <= 0.5}
         >
-          <MinusIcon className="h-4 w-4" />
+          <Minus className="h-4 w-4" />
         </Button>
         <span className="text-xs font-medium">{Math.round(scale * 100)}%</span>
         <Button 
@@ -229,7 +230,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
           onClick={handleZoomIn}
           disabled={scale >= 3}
         >
-          <PlusIcon className="h-4 w-4" />
+          <Plus className="h-4 w-4" />
         </Button>
       </div>
       
@@ -247,20 +248,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
   );
 };
 
-// Simple icons for zoom controls
-const MinusIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <line x1="5" y1="12" x2="19" y2="12" />
-  </svg>
-);
-
-const PlusIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <line x1="12" y1="5" x2="12" y2="19" />
-    <line x1="5" y1="12" x2="19" y2="12" />
-  </svg>
-);
-
+// Simple Button component
 const Button = ({ 
   children, 
   variant = 'default', 
