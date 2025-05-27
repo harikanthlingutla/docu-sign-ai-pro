@@ -1,0 +1,104 @@
+# Cursor AI Rules for SignThatDoc Backend
+
+project structure
+.
+├── README.md
+├── backend
+├── bun.lockb
+├── components.json
+├── eslint.config.js
+├── index.html
+├── node_modules
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── public
+├── src
+├── tailwind.config.ts
+├── tasks.md
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
+
+## 1. Backend Project Structure
+- All backend code inside `/backend/app/`
+- Separate `routers/` (API endpoints) and `services/` (business logic)
+- Keep routers small: 2-4 endpoints per file
+- Main app entry: `backend/app/main.py`
+- Use `@router` decorators and clean prefixes
+
+## 2. Authentication Rules
+- Use Supabase Auth (JWTs) for authentication
+- Middleware to validate JWTs on protected routes
+- On signup, generate PQC keys (Dilithium2) and store securely
+
+## 3. Document Upload and Management
+- Only accept PDF, DOCX, TXT files
+- Upload files to Supabase Storage (not local server)
+- Save document metadata (user_id, doc_id, file_url, timestamps)
+
+## 4. Signature Logic
+- Save user-drawn signature (SVG/PNG) before signing
+- When signing:
+  - Overlay visual signature on PDF (PyMuPDF)
+  - Hash full PDF (SHA3-256)
+  - Sign the hash with Dilithium2 private key
+  - Embed signature metadata (PQC signature, public key, timestamp)
+
+## 5. AI Document Chat (RAG Engine)
+- Extract text from PDF (PyMuPDF)
+- Chunk into 500-700 tokens with overlap
+- Embed with sentence-transformers (bge-base-en-v1.5)
+- Store embeddings in vector DB (Cloudflare D1/Supabase pgvector)
+- For queries:
+  - Retrieve top-K relevant chunks
+  - Pass chunks + question to Gemini API for answering
+
+## 6. Voice Chat Rules
+- Accept audio input (WAV/MP3)
+- Transcribe using Whisper or Gemini
+- Perform RAG search on transcript
+- Synthesize voice reply using ElevenLabs API
+
+## 7. Guest Signing and Secure Links
+- Encrypt session/document ID using CRYSTALS-Kyber for guest links
+- Guest completes visual + PQC cryptographic signature
+- Update audit trail with guest signer info
+
+## 8. Email Sending
+- Send finalized signed documents via Gmail API or SMTP
+- Attach audit trail metadata if possible
+- Use professional email templates
+
+## 9. Coding Style Rules
+- Use async/await for IO-bound operations
+- Type hint all function inputs and outputs
+- Validate all request bodies with Pydantic
+- Standardize API responses:
+  ```json
+  {"status": "success", "data": {...}}
+  {"status": "error", "message": "reason"}
+  ```
+- Minimal external dependencies
+- Keep routers skinny; move logic to `services/`
+
+## 10. Deployment Rules
+- Must run cleanly with:
+  ```bash
+  uvicorn app.main:app --reload
+  ```
+- Prepare for Cloudflare/Render deployment
+- Use .env for all sensitive configs
+
+---
+
+# Summary for Cursor
+Always respect backend modularity.
+Always authenticate users via Supabase JWTs.
+Always PQC-sign documents after visual signing.
+Always embed metadata inside signed PDFs.
+Always RAG search documents before answering queries with Gemini.
+Always handle voice interactions using ElevenLabs for output.
+Code clean, async, typed, and lightweight.
+

@@ -1,0 +1,190 @@
+# SignThatDoc Backend Prompts (Updated with Project Context)
+
+---
+
+## Project Context
+
+**Frontend:**
+- Built using Vite, TailwindCSS, TypeScript.
+- Pages present:
+  - `/` (Landing page)
+  - `/signin` (User login page)
+  - `/signup` (User registration page)
+  - `/dashboard` (Main dashboard for uploading, chatting, and signing documents)
+  - `/enterprise` (Enterprise plan info page)
+- Frontend connects to backend API endpoints for user auth, document upload, AI document chat, document signing, guest signing, and email sending.
+- Axios is used for HTTP API calls to backend.
+
+**Backend:**
+- Built using FastAPI and Python.
+- Backend folders:
+  - `/backend/app/routers/` (auth.py, documents.py, signatures.py, assistant.py, share.py, voice_chat.py, email.py)
+  - `/backend/app/services/` (supabase_service.py, crypto_service.py, ai_service.py, email_service.py)
+  - `models.py` for Pydantic models
+  - `main.py` for FastAPI app initialization
+- Supabase used for:
+  - Auth (JWT based)
+  - File Storage
+  - Database
+- Gemini Pro API used for AI document understanding (RAG-based flow).
+- ElevenLabs API used for voice output responses.
+- Post-Quantum Cryptographic signing (Dilithium2, Kyber) implemented on document signatures.
+
+**Important Application Logic:**
+- User uploads documents and chats with documents using AI.
+- User can visually sign the document.
+- After visual signing, backend digitally signs the PDF using post-quantum cryptography.
+- User can also share documents securely with guests using Kyber-encrypted links.
+- Guest users can sign documents without registering.
+- Final signed documents are emailed to recipients using SMTP/Gmail integration.
+- Full audit trail and metadata embedded in signed PDFs.
+
+**Focus Moving Forward:**
+- Follow modular architecture already built.
+- No folder or file re-creation unless explicitly told.
+- Work with existing frontend/backend code.
+- Help complete missing features, polish flows, build utilities (such as history, audit logs, dashboards).
+
+---
+
+## 1. Authentication Module
+
+- **Prompt:** "Inside `routers/auth.py`, implement `/signup` endpoint: ✅
+  - Accept email and password
+  - Register with Supabase Auth
+  - Generate Dilithium2 keypair using oqs-python
+  - Store public key in database."
+
+- **Prompt:** "Inside `routers/auth.py`, implement `/login` endpoint: ✅
+  - Accept email and password
+  - Authenticate via Supabase Auth
+  - Return JWT access token."
+
+- **Prompt:** "Create JWT auth middleware to: ✅
+  - Validate Supabase JWTs
+  - Attach `user_id` to request.state inside `routers/auth.py` or as middleware."
+
+---
+
+## 2. Document Upload and Management
+
+- **Prompt:** "Inside `routers/documents.py`, implement `/upload` endpoint: ✅
+  - Accept PDF/DOCX/TXT file upload
+  - Upload file to Supabase Storage
+  - Save document metadata (user_id, file_url, timestamps) to database."
+
+- **Prompt:** "Inside `routers/documents.py`, implement `/list` endpoint: ✅
+  - List all documents uploaded by the authenticated user."
+
+- **Prompt:** "Inside `routers/documents.py`, implement `/delete` endpoint: ✅
+  - Allow authenticated user to delete their document.
+  - Delete file from Storage and DB."
+
+---
+
+## 3. Signature Management
+
+- **Prompt:** "Inside `routers/signatures.py`, implement `/save-style` endpoint: ✅
+  - Accept signature file (SVG/PNG)
+  - Upload to Supabase Storage and link to user profile."
+
+- **Prompt:** "Inside `routers/signatures.py`, implement `/apply-signature` endpoint: ✅
+  - Fetch document from Storage
+  - Overlay visual signature at given coordinates
+  - Hash the document (SHA3-256)
+  - Sign the hash using user's Dilithium2 private key
+  - Embed signature metadata into PDF."
+
+- **Prompt:** "Inside `routers/signatures.py`, implement `/list` endpoint: ✅
+  - Fetch all saved signatures for authenticated user."
+
+- **Prompt:** "Inside `routers/signatures.py`, implement `/delete` endpoint: ✅
+  - Allow user to delete a saved signature."
+
+---
+
+## 4. AI Contract Assistant (RAG)
+
+- **Prompt:** "Inside `routers/assistant.py`, implement `/analyze-doc` endpoint: ✅
+  - Extract text from uploaded PDF using PyMuPDF
+  - Chunk text into 500-700 tokens per chunk
+  - Generate embeddings using `bge-base-en-v1.5` model
+  - Save embeddings into vector database."
+
+- **Prompt:** "Inside `routers/assistant.py`, implement `/ask` endpoint: ✅
+  - Accept user query and document ID
+  - Embed query, search vector DB for relevant chunks
+  - Compose prompt and call Gemini Pro API
+  - Return AI-generated answer."
+
+---
+
+## 5. Voice Interaction with Document
+
+- **Prompt:** "Inside `routers/voice_chat.py`, implement `/ask` endpoint: ✅
+  - Accept audio input (WAV or MP3)
+  - Transcribe to text using Whisper or Gemini Speech-to-Text
+  - Search document using RAG engine
+  - Generate Gemini AI reply
+  - Synthesize reply using ElevenLabs API
+  - Return both text and audio."
+
+---
+
+## 6. Secure Guest Signing
+
+- **Prompt:** "Inside `routers/share.py`, implement `/generate-link` endpoint: ✅
+  - Generate Kyber-encrypted link containing session and document ID."
+
+- **Prompt:** "Inside `routers/share.py`, implement `/guest-sign` endpoint: ✅
+  - Accept guest signature (drawn signature file + coordinates)
+  - Apply signature to document visually and cryptographically using temporary Dilithium2 keys
+  - Save guest signer information and audit trail."
+
+---
+
+## 7. Email Sending Module
+
+- **Prompt:** "Inside `routers/email.py`, implement `/send-signed-document` endpoint: ✅
+  - Fetch signed document from Storage
+  - Send the document to recipient email via SMTP or Gmail API."
+
+---
+
+## 8. Profile Management Module
+
+- **Prompt:** "Inside `routers/profile.py`, implement `/profile/get` endpoint: ✅
+  - Fetch user's full_name, organization, email, current plan, and document usage."
+
+- **Prompt:** "Inside `routers/profile.py`, implement `/profile/update` endpoint: ✅
+  - Accept full_name and organization fields and update profile information."
+
+---
+
+## 9. Pricing and Billing Module
+
+- **Prompt:** "Inside `routers/billing.py`, implement `/billing/create-checkout-session` endpoint: ✅
+  - Create a Stripe Checkout Session for subscriptions based on selected plan."
+
+- **Prompt:** "Inside `routers/billing.py`, implement `/billing/create-payg-session` endpoint: ✅
+  - Create a Stripe Checkout Session for a $3 pay-as-you-go document."
+
+- **Prompt:** "Inside `routers/billing.py`, implement `/billing/stripe-webhook` endpoint: ✅
+  - Listen for Stripe events and update user's subscription plan and document limits accordingly."
+
+---
+
+# General Cursor Reminder
+
+**When giving any prompt:**
+- Do not create new folders or files.
+- Work inside existing router or service files.
+- Follow modular FastAPI structure.
+- Validate JWTs on protected routes.
+- Apply PQC digital signatures after visual signature.
+- Embed signature metadata inside PDFs.
+- Use async/await properly.
+- Keep code clean, typed, and production-grade.
+- Always return standardized JSON success/error responses.
+
+---

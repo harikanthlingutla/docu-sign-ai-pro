@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+python-dotenv
+requests
+supabase-py
+python-multipart
+PyMuPDF
+sentence-transformers
+chromadb
+oqs-python
+google-generativeai
+whisper
+elevenlabs
+email-validator
+python-jose
