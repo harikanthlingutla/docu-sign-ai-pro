@@ -1,12 +1,13 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { DocumentUpload } from '@/components/DocumentUpload';
 import { SignaturesTab } from '@/components/SignaturesTab';
-import { ChatInterface } from '@/components/ChatInterface';
 import { SecurityTab } from '@/components/SecurityTab';
 import { ProfileTab } from '@/components/ProfileTab';
 import { useResponsive } from '@/hooks/use-responsive';
-import { FileText, MessageSquare, Pencil, Shield, User, LogOut, Menu, X } from 'lucide-react';
+import { FileText, Pencil, Shield, User, LogOut, Menu, X, Sparkles } from 'lucide-react';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('documents');
@@ -18,39 +19,26 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-secondary-100 flex overflow-hidden">
-      {/* Sidebar - Desktop */}
+    <div className="min-h-screen bg-slate-50 flex overflow-hidden">
+      {/* Professional Sidebar */}
       <aside 
         className={`fixed md:relative z-30 md:z-auto h-full transition-all duration-300 ease-in-out transform 
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-        w-72 bg-[#1E293B] text-white md:flex flex-col shadow-lg`}
+        w-72 bg-white border-r border-slate-200 md:flex flex-col shadow-xl`}
       >
-        <div className="p-4 border-b border-secondary-600">
-          <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-md bg-primary flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-white"
-              >
-                <path d="M10 13.5V10h-7v3.5a1.5 1.5 0 0 0 3 0V12a1 1 0 0 1 2 0v1.5a1.5 1.5 0 0 0 3 0Z" />
-                <path d="M10 13.5V10h7v3.5a1.5 1.5 0 0 1-3 0V12a1 1 0 0 0-2 0v1.5a1.5 1.5 0 0 1-3 0Z" />
-                <path d="M21 19H3" />
-                <path d="M12 2v6" />
-              </svg>
+        <div className="p-6 border-b border-slate-200">
+          <div className="flex items-center space-x-3">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
+              <Sparkles className="h-6 w-6 text-white" />
             </div>
-            <span className="text-white font-display font-bold text-xl">SignThatDoc</span>
+            <div>
+              <h1 className="text-xl font-bold text-slate-900">SignThatDoc</h1>
+              <p className="text-sm text-slate-500">Professional Edition</p>
+            </div>
             
             <button 
               onClick={toggleSidebar}
-              className="ml-auto text-white md:hidden"
+              className="ml-auto text-slate-400 hover:text-slate-600 md:hidden"
             >
               <X size={20} />
             </button>
@@ -58,102 +46,103 @@ const Dashboard = () => {
         </div>
         
         <nav className="py-6 flex-1 overflow-y-auto">
-          <div className="px-3 mb-4">
-            <p className="text-xs uppercase text-gray-400 font-medium tracking-wider px-3 mb-2">Document Tools</p>
+          <div className="px-6 mb-6">
+            <p className="text-xs uppercase text-slate-400 font-semibold tracking-wider mb-4">Workspace</p>
           </div>
           
           <button
-            className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors ${
+            className={`w-full flex items-center space-x-4 px-6 py-3 text-left transition-all duration-200 ${
               activeTab === 'documents'
-                ? 'bg-secondary-600 text-white border-l-2 border-primary'
-                : 'text-gray-300 hover:bg-secondary-700'
+                ? 'bg-primary/10 text-primary border-l-4 border-primary font-medium'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
             onClick={() => {
               setActiveTab('documents');
               if (!isMdAndUp) setSidebarOpen(false);
             }}
           >
-            <FileText className="h-5 w-5" />
+            <div className={`p-2 rounded-lg ${
+              activeTab === 'documents' ? 'bg-primary/20' : 'bg-slate-100'
+            }`}>
+              <FileText className="h-5 w-5" />
+            </div>
             <span>Documents</span>
           </button>
           
           <button
-            className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors ${
+            className={`w-full flex items-center space-x-4 px-6 py-3 text-left transition-all duration-200 ${
               activeTab === 'signatures'
-                ? 'bg-secondary-600 text-white border-l-2 border-primary'
-                : 'text-gray-300 hover:bg-secondary-700'
+                ? 'bg-primary/10 text-primary border-l-4 border-primary font-medium'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
             onClick={() => {
               setActiveTab('signatures');
               if (!isMdAndUp) setSidebarOpen(false);
             }}
           >
-            <Pencil className="h-5 w-5" />
+            <div className={`p-2 rounded-lg ${
+              activeTab === 'signatures' ? 'bg-primary/20' : 'bg-slate-100'
+            }`}>
+              <Pencil className="h-5 w-5" />
+            </div>
             <span>Signatures</span>
           </button>
           
-          <div className="px-3 my-4">
-            <p className="text-xs uppercase text-gray-400 font-medium tracking-wider px-3 mb-2">AI & Security</p>
+          <div className="px-6 my-6">
+            <p className="text-xs uppercase text-slate-400 font-semibold tracking-wider mb-4">Security & Settings</p>
           </div>
           
           <button
-            className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors ${
-              activeTab === 'assistant'
-                ? 'bg-secondary-600 text-white border-l-2 border-primary'
-                : 'text-gray-300 hover:bg-secondary-700'
-            }`}
-            onClick={() => {
-              setActiveTab('assistant');
-              if (!isMdAndUp) setSidebarOpen(false);
-            }}
-          >
-            <MessageSquare className="h-5 w-5" />
-            <span>AI Assistant</span>
-          </button>
-          
-          <button
-            className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors ${
+            className={`w-full flex items-center space-x-4 px-6 py-3 text-left transition-all duration-200 ${
               activeTab === 'security'
-                ? 'bg-secondary-600 text-white border-l-2 border-primary'
-                : 'text-gray-300 hover:bg-secondary-700'
+                ? 'bg-primary/10 text-primary border-l-4 border-primary font-medium'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
             onClick={() => {
               setActiveTab('security');
               if (!isMdAndUp) setSidebarOpen(false);
             }}
           >
-            <Shield className="h-5 w-5" />
+            <div className={`p-2 rounded-lg ${
+              activeTab === 'security' ? 'bg-primary/20' : 'bg-slate-100'
+            }`}>
+              <Shield className="h-5 w-5" />
+            </div>
             <span>Security Keys</span>
           </button>
           
           <button
-            className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors ${
+            className={`w-full flex items-center space-x-4 px-6 py-3 text-left transition-all duration-200 ${
               activeTab === 'profile'
-                ? 'bg-secondary-600 text-white border-l-2 border-primary'
-                : 'text-gray-300 hover:bg-secondary-700'
+                ? 'bg-primary/10 text-primary border-l-4 border-primary font-medium'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
             onClick={() => {
               setActiveTab('profile');
               if (!isMdAndUp) setSidebarOpen(false);
             }}
           >
-            <User className="h-5 w-5" />
+            <div className={`p-2 rounded-lg ${
+              activeTab === 'profile' ? 'bg-primary/20' : 'bg-slate-100'
+            }`}>
+              <User className="h-5 w-5" />
+            </div>
             <span>Profile</span>
           </button>
         </nav>
         
-        <div className="border-t border-secondary-600 mt-auto">
-          <div className="p-4">
+        <div className="border-t border-slate-200 mt-auto">
+          <div className="p-6">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="h-10 w-10 rounded-full bg-secondary-700 flex items-center justify-center">
-                <User className="h-5 w-5 text-gray-300" />
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                <User className="h-6 w-6 text-white" />
               </div>
               <div>
-                <div className="font-medium text-white">John Doe</div>
-                <div className="text-sm text-gray-400">john@example.com</div>
+                <div className="font-semibold text-slate-900">John Doe</div>
+                <div className="text-sm text-slate-500">john@example.com</div>
               </div>
             </div>
-            <Button variant="outline" className="w-full flex items-center justify-center bg-transparent border-gray-600 text-gray-300 hover:bg-secondary-700 hover:text-white">
+            <Button variant="outline" className="w-full border-slate-300 text-slate-700 hover:bg-slate-50">
               <LogOut className="h-4 w-4 mr-2" />
               Sign Out
             </Button>
@@ -162,86 +151,55 @@ const Dashboard = () => {
       </aside>
 
       <div className="flex-1 flex flex-col w-full">
-        <div className="bg-[#1E293B] text-white p-4 flex items-center justify-between shadow-md">
-          <button 
-            onClick={toggleSidebar} 
-            className="text-white md:hidden"
-          >
-            <Menu size={24} />
-          </button>
-          
-          <div className="ml-4 md:ml-0">
-            <h1 className="text-lg font-bold">
-              {activeTab === 'documents' && 'Documents'}
-              {activeTab === 'signatures' && 'Signatures'}
-              {activeTab === 'assistant' && 'AI Assistant'}
-              {activeTab === 'security' && 'Security Keys'}
-              {activeTab === 'profile' && 'My Profile'}
-            </h1>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-full bg-secondary-700 flex items-center justify-center md:hidden">
-              <User className="h-4 w-4 text-gray-300" />
+        {/* Professional Header */}
+        <div className="bg-white border-b border-slate-200 p-6 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button 
+                onClick={toggleSidebar} 
+                className="text-slate-600 hover:text-slate-900 md:hidden"
+              >
+                <Menu size={24} />
+              </button>
+              
+              <div>
+                <h1 className="text-2xl font-bold text-slate-900">
+                  {activeTab === 'documents' && 'Document Management'}
+                  {activeTab === 'signatures' && 'Signature Center'}
+                  {activeTab === 'security' && 'Security Center'}
+                  {activeTab === 'profile' && 'Account Settings'}
+                </h1>
+                <p className="text-slate-600 mt-1">
+                  {activeTab === 'documents' && 'Upload, manage, and edit your professional documents'}
+                  {activeTab === 'signatures' && 'Create and manage your digital signatures'}
+                  {activeTab === 'security' && 'Quantum-resistant security management'}
+                  {activeTab === 'profile' && 'Manage your account and preferences'}
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-3">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center md:hidden">
+                <User className="h-5 w-5 text-white" />
+              </div>
             </div>
           </div>
         </div>
         
-        <div className="flex-1 p-2 sm:p-4 md:p-6 overflow-x-hidden">
+        <div className="flex-1 p-8 overflow-x-hidden">
           <div className="max-w-6xl mx-auto w-full">
-            {activeTab === 'documents' && (
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-xl font-bold mb-1">My Documents</h2>
-                  <p className="text-tertiary text-sm">Upload and manage your documents</p>
-                </div>
-                <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
-                  <DocumentUpload />
-                </div>
-              </div>
-            )}
-            
+            {activeTab === 'documents' && <DocumentUpload />}
             {activeTab === 'signatures' && (
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-xl font-bold mb-1">Signature Manager</h2>
-                  <p className="text-tertiary text-sm">Create and manage your digital signatures</p>
-                </div>
-                <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
-                  <SignaturesTab />
-                </div>
-              </div>
+              <Card className="professional-card p-0">
+                <SignaturesTab />
+              </Card>
             )}
-            
-            {activeTab === 'assistant' && (
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-xl font-bold mb-1">AI Document Assistant</h2>
-                  <p className="text-tertiary text-sm">Get intelligent insights about your documents</p>
-                </div>
-                <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
-                  <ChatInterface />
-                </div>
-              </div>
-            )}
-            
             {activeTab === 'security' && (
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-xl font-bold mb-1">Cryptographic Security</h2>
-                  <p className="text-tertiary text-sm">Quantum-resistant key management</p>
-                </div>
-                <div className="bg-white rounded-lg overflow-hidden border shadow-sm">
-                  <SecurityTab />
-                </div>
-              </div>
+              <Card className="professional-card p-0">
+                <SecurityTab />
+              </Card>
             )}
-            
-            {activeTab === 'profile' && (
-              <div className="space-y-6">
-                <ProfileTab />
-              </div>
-            )}
+            {activeTab === 'profile' && <ProfileTab />}
           </div>
         </div>
       </div>

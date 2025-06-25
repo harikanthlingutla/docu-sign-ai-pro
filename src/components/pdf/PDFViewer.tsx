@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Canvas, Rect, Textbox, Image as FabricImage, type TPointerEventInfo, type TPointerEvent } from 'fabric';
 import * as pdfjsLib from 'pdfjs-dist';
-import { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist/types/src/display/api';
+import { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
 import { Loader2, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SignatureDialog } from './SignatureDialog';
@@ -9,21 +9,38 @@ import { SignatureDialog } from './SignatureDialog';
 // Set up PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
+interface TextFormatting {
+  color: string;
+  fontFamily: string;
+  fontSize: number;
+  fontWeight: string;
+  fontStyle: string;
+  textDecoration: string;
+}
+
 interface PDFViewerProps {
   documentPath: string;
   currentTool: string;
+  textFormatting?: TextFormatting;
 }
 
 export const PDFViewer: React.FC<PDFViewerProps> = ({ 
   documentPath,
-  currentTool 
+  currentTool,
+  textFormatting = {
+    color: '#000000',
+    fontFamily: 'Arial, sans-serif',
+    fontSize: 14,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    textDecoration: 'none',
+  }
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRefs = useRef<HTMLCanvasElement[]>([]);
   const fabricCanvasRefs = useRef<Canvas[]>([]);
   const [pdfDocument, setPdfDocument] = useState<PDFDocumentProxy | null>(null);
   const [numPages, setNumPages] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [scale, setScale] = useState<number>(1.5);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [signatureDialogOpen, setSignatureDialogOpen] = useState<boolean>(false);
@@ -36,17 +53,12 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
       
       try {
         setIsLoading(true);
-        
-        // In a real app, this would be the actual document path from Supabase or other source
-        // For demo purposes, we'll use a sample PDF
         const pdfUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
-        
         const loadingTask = pdfjsLib.getDocument(pdfUrl);
         const pdf = await loadingTask.promise;
         
         setPdfDocument(pdf);
         setNumPages(pdf.numPages);
-        setCurrentPage(1);
       } catch (error) {
         console.error('Error loading PDF:', error);
       } finally {
@@ -57,12 +69,11 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     loadPDF();
   }, [documentPath]);
 
-  // Render PDF pages when the document is loaded
+  // Render PDF pages
   useEffect(() => {
     if (!pdfDocument || !containerRef.current) return;
 
     const renderPages = async () => {
-      // Clear any existing canvas references
       canvasRefs.current = [];
       fabricCanvasRefs.current = [];
       
@@ -74,40 +85,33 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         try {
           const page = await pdfDocument.getPage(pageNum);
           
-          // Create a wrapper for this page
           const pageWrapper = document.createElement('div');
-          pageWrapper.className = 'pdf-page-wrapper relative mb-8';
+          pageWrapper.className = 'pdf-page-wrapper relative mb-8 shadow-lg rounded-lg overflow-hidden border border-slate-200';
           containerRef.current?.appendChild(pageWrapper);
           
-          // Create canvas for PDF.js to render the PDF
           const pdfCanvas = document.createElement('canvas');
           pdfCanvas.className = 'pdf-canvas absolute top-0 left-0';
           pageWrapper.appendChild(pdfCanvas);
           
-          // Calculate viewport dimensions
           const viewport = page.getViewport({ scale });
           pdfCanvas.width = viewport.width;
           pdfCanvas.height = viewport.height;
           
-          // Set wrapper dimensions to match canvas
           pageWrapper.style.width = `${viewport.width}px`;
           pageWrapper.style.height = `${viewport.height}px`;
           
-          // Render PDF page to canvas
           const renderContext = {
             canvasContext: pdfCanvas.getContext('2d')!,
             viewport: viewport,
           };
           await page.render(renderContext).promise;
           
-          // Create Fabric.js canvas for annotations, with the same dimensions
           const fabricCanvas = document.createElement('canvas');
           fabricCanvas.className = 'fabric-canvas absolute top-0 left-0';
           fabricCanvas.width = viewport.width;
           fabricCanvas.height = viewport.height;
           pageWrapper.appendChild(fabricCanvas);
           
-          // Initialize Fabric.js canvas
           const fCanvas = new Canvas(fabricCanvas, {
             width: viewport.width,
             height: viewport.height,
@@ -115,11 +119,9 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
             backgroundColor: 'transparent',
           });
           
-          // Store references to the canvas elements
           canvasRefs.current.push(pdfCanvas);
           fabricCanvasRefs.current.push(fCanvas);
           
-          // Set up event listeners for this canvas
           setupFabricEvents(fCanvas, pageNum - 1);
         } catch (error) {
           console.error(`Error rendering page ${pageNum}:`, error);
@@ -130,121 +132,119 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     renderPages();
   }, [pdfDocument, numPages, scale]);
 
-  // Update canvas mode when current tool changes
+  // Update canvas mode when tool changes
   useEffect(() => {
     fabricCanvasRefs.current.forEach(canvas => {
       if (!canvas) return;
-      
-      // Enable/disable selection based on tool
       canvas.selection = currentTool === 'select';
-      
-      // Set drawing mode based on tool
-      canvas.isDrawingMode = currentTool === 'draw';
-      
-      if (canvas.isDrawingMode && canvas.freeDrawingBrush) {
-        canvas.freeDrawingBrush.width = 2;
-        canvas.freeDrawingBrush.color = '#000000';
-      }
-      
-      // Open signature dialog if signature tool is selected
-      if (currentTool === 'signature') {
-        // We don't automatically open the dialog here, it will be triggered on canvas click
-      }
     });
   }, [currentTool]);
 
-  // Set up Fabric.js canvas event handlers
   const setupFabricEvents = (canvas: Canvas, pageIndex: number) => {
     canvas.on('mouse:down', (options: TPointerEventInfo<TPointerEvent>) => {
       handleCanvasMouseDown(canvas, options, pageIndex);
     });
-
-    // Additional event handlers can be added here
   };
 
   const handleCanvasMouseDown = (canvas: Canvas, options: TPointerEventInfo<TPointerEvent>, pageIndex: number) => {
-    // Get the pointer position from the event
     const pointer = options.absolutePointer || canvas.getPointer(options.e);
     if (!pointer) return;
 
-    if (currentTool === 'highlight') {
-      // Create a semi-transparent yellow rectangle for highlighting
-      const rect = new Rect({
-        left: pointer.x,
-        top: pointer.y,
-        width: 100,
-        height: 20,
-        fill: 'rgba(255, 255, 0, 0.3)',
-        selectable: true,
-        evented: true,
-      });
-      canvas.add(rect);
-      canvas.renderAll();
-    } else if (currentTool === 'redact') {
-      // Create a black rectangle for redaction
-      const rect = new Rect({
-        left: pointer.x,
-        top: pointer.y,
-        width: 100,
-        height: 20,
-        fill: 'black',
-        selectable: true,
-        evented: true,
-      });
-      canvas.add(rect);
-      canvas.renderAll();
-    } else if (currentTool === 'text') {
-      // Create a text box
-      const text = new Textbox('Add text here', {
-        left: pointer.x,
-        top: pointer.y,
-        fontFamily: 'Arial',
-        fontSize: 16,
-        fill: '#000000',
-        width: 200,
-        selectable: true,
-        evented: true,
-      });
-      canvas.add(text);
-      canvas.renderAll();
-    } else if (currentTool === 'signature') {
-      // Store the active canvas and open signature dialog
-      setActiveCanvas({ canvas, pageIndex });
-      setSignatureDialogOpen(true);
-    }
-  };
-
-  // Add signature to the document
-  const handleAddSignature = (signatureDataUrl: string) => {
-    if (!activeCanvas) return;
-
-    // Create an image from the signature data URL
-    FabricImage.fromURL(
-      signatureDataUrl, 
-      {
-        // Optional configuration options can go here
-      },
-      (img) => {
-        // Position the signature where the user clicked
-        img.set({
-          left: activeCanvas.canvas.width! / 2 - 100,
-          top: activeCanvas.canvas.height! / 2 - 50,
-          scaleX: 0.5,
-          scaleY: 0.5,
+    switch (currentTool) {
+      case 'text':
+        const text = new Textbox('Click to edit text', {
+          left: pointer.x,
+          top: pointer.y,
+          fontFamily: textFormatting.fontFamily,
+          fontSize: textFormatting.fontSize,
+          fill: textFormatting.color,
+          fontWeight: textFormatting.fontWeight,
+          fontStyle: textFormatting.fontStyle,
+          underline: textFormatting.textDecoration === 'underline',
+          width: 200,
           selectable: true,
           evented: true,
         });
+        canvas.add(text);
+        canvas.renderAll();
+        break;
+
+      case 'textbox':
+        const textBox = new Rect({
+          left: pointer.x,
+          top: pointer.y,
+          width: 150,
+          height: 40,
+          fill: 'transparent',
+          stroke: textFormatting.color,
+          strokeWidth: 2,
+          selectable: true,
+          evented: true,
+        });
+        canvas.add(textBox);
         
-        activeCanvas.canvas.add(img);
-        activeCanvas.canvas.renderAll();
-        
-        // Close the dialog
-        setSignatureDialogOpen(false);
-      }
-    );
+        const textInBox = new Textbox('Text Box', {
+          left: pointer.x + 10,
+          top: pointer.y + 10,
+          fontFamily: textFormatting.fontFamily,
+          fontSize: textFormatting.fontSize,
+          fill: textFormatting.color,
+          fontWeight: textFormatting.fontWeight,
+          fontStyle: textFormatting.fontStyle,
+          underline: textFormatting.textDecoration === 'underline',
+          width: 130,
+          selectable: true,
+          evented: true,
+        });
+        canvas.add(textInBox);
+        canvas.renderAll();
+        break;
+
+      case 'date':
+        const currentDate = new Date().toLocaleDateString();
+        const dateText = new Textbox(currentDate, {
+          left: pointer.x,
+          top: pointer.y,
+          fontFamily: textFormatting.fontFamily,
+          fontSize: textFormatting.fontSize,
+          fill: textFormatting.color,
+          fontWeight: textFormatting.fontWeight,
+          fontStyle: textFormatting.fontStyle,
+          underline: textFormatting.textDecoration === 'underline',
+          width: 120,
+          selectable: true,
+          evented: true,
+        });
+        canvas.add(dateText);
+        canvas.renderAll();
+        break;
+
+      case 'signature':
+        setActiveCanvas({ canvas, pageIndex });
+        setSignatureDialogOpen(true);
+        break;
+    }
   };
 
-  // Handle zoom in/out
+  const handleAddSignature = (signatureDataUrl: string) => {
+    if (!activeCanvas) return;
+
+    FabricImage.fromURL(signatureDataUrl, {}, (img) => {
+      img.set({
+        left: activeCanvas.canvas.width! / 2 - 100,
+        top: activeCanvas.canvas.height! / 2 - 50,
+        scaleX: 0.5,
+        scaleY: 0.5,
+        selectable: true,
+        evented: true,
+      });
+      
+      activeCanvas.canvas.add(img);
+      activeCanvas.canvas.renderAll();
+      setSignatureDialogOpen(false);
+    });
+  };
+
   const handleZoomIn = () => {
     setScale(prev => Math.min(prev + 0.2, 3));
   };
@@ -254,30 +254,34 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col bg-neutral-100">
+    <div className="h-full flex flex-col bg-slate-100">
       {/* Zoom controls */}
-      <div className="bg-white border-b border-gray-200 p-2 flex items-center justify-end space-x-2">
+      <div className="bg-white border-b border-slate-200 p-3 flex items-center justify-end space-x-3">
         <Button 
           variant="outline" 
           size="sm" 
           onClick={handleZoomOut}
           disabled={scale <= 0.5}
+          className="border-slate-300"
         >
           <Minus className="h-4 w-4" />
         </Button>
-        <span className="text-xs font-medium">{Math.round(scale * 100)}%</span>
+        <span className="text-sm font-medium text-slate-700 min-w-[60px] text-center">
+          {Math.round(scale * 100)}%
+        </span>
         <Button 
           variant="outline" 
           size="sm" 
           onClick={handleZoomIn}
           disabled={scale >= 3}
+          className="border-slate-300"
         >
           <Plus className="h-4 w-4" />
         </Button>
       </div>
       
       {/* PDF viewer area */}
-      <div className="flex-1 overflow-auto p-6 flex justify-center">
+      <div className="flex-1 overflow-auto p-8 flex justify-center">
         {isLoading ? (
           <div className="flex items-center justify-center w-full">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -287,7 +291,6 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         )}
       </div>
 
-      {/* Signature dialog */}
       <SignatureDialog 
         open={signatureDialogOpen} 
         onOpenChange={setSignatureDialogOpen} 

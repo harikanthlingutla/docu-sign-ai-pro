@@ -1,23 +1,19 @@
 
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { PDFDocument } from 'pdf-lib';
-import { Loader2, ArrowLeft, Save } from 'lucide-react';
+import { Loader2, ArrowLeft, Save, Download, Share } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { PDFViewer } from '@/components/pdf/PDFViewer';
-import { ToolbarAnnotation } from '@/components/pdf/ToolbarAnnotation';
+import { ProfessionalToolbar } from '@/components/pdf/ProfessionalToolbar';
+import { SitaChat } from '@/components/SitaChat';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { useResponsive } from '@/hooks/use-responsive';
 
 const Editor = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useIsMobile();
-  const { isMdAndUp } = useResponsive();
   
   const [documentName, setDocumentName] = useState<string>('Document.pdf');
   const [documentPath, setDocumentPath] = useState<string | null>(null);
@@ -25,39 +21,40 @@ const Editor = () => {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [currentTool, setCurrentTool] = useState<string>('select');
   
-  // Get document path from query params
+  // Text formatting states
+  const [selectedColor, setSelectedColor] = useState<string>('#000000');
+  const [selectedFont, setSelectedFont] = useState<string>('Arial, sans-serif');
+  const [selectedSize, setSelectedSize] = useState<number>(14);
+  const [textStyle, setTextStyle] = useState({
+    bold: false,
+    italic: false,
+    underline: false,
+  });
+  
+  // Get document info from query params
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
-    const path = queryParams.get('path');
+    const document = queryParams.get('document');
     const name = queryParams.get('name');
     
-    if (path) {
-      setDocumentPath(path);
+    if (document) {
+      setDocumentPath(document);
     }
     
     if (name) {
-      setDocumentName(name);
+      setDocumentName(decodeURIComponent(name));
     }
     
-    // In a real app, we would validate the document access here
+    // Simulate loading
     setTimeout(() => {
       setIsLoading(false);
-    }, 1000); // Simulate loading
+    }, 1000);
   }, [location]);
   
-  // Handle saving document
   const handleSave = async () => {
     setIsSaving(true);
-    
     try {
-      // In a real app, this would:
-      // 1. Get the canvas data from Fabric.js
-      // 2. Use pdf-lib to merge annotations with the original PDF
-      // 3. Upload to Supabase storage
-      
-      // Simulate saving delay
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
       toast.success('Document saved successfully');
     } catch (error) {
       console.error('Error saving document:', error);
@@ -70,156 +67,144 @@ const Editor = () => {
   const handleChangeTool = (tool: string) => {
     setCurrentTool(tool);
   };
+
+  const handleTextStyleChange = (style: { bold?: boolean; italic?: boolean; underline?: boolean }) => {
+    setTextStyle(prev => ({ ...prev, ...style }));
+  };
+
+  const handleDownload = () => {
+    toast.success('Document downloaded successfully');
+  };
+
+  const handleShare = () => {
+    toast.success('Share link copied to clipboard');
+  };
   
-  // Show mobile warning if on mobile
+  // Show mobile warning
   if (isMobile) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen p-6 text-center bg-secondary-100">
-        <div className="max-w-md">
-          <h1 className="text-2xl font-bold mb-4">Desktop Experience Recommended</h1>
-          <p className="mb-6 text-tertiary">
-            The PDF editor works best on larger screens. Please switch to a desktop device for the full editing experience.
+      <div className="flex flex-col items-center justify-center h-screen p-6 text-center bg-slate-50">
+        <Card className="professional-card p-8 max-w-md">
+          <h1 className="text-2xl font-bold mb-4 text-slate-900">Desktop Experience Required</h1>
+          <p className="mb-6 text-slate-600">
+            The professional document editor works best on larger screens. Please switch to a desktop or tablet device for the full editing experience.
           </p>
-          <Button onClick={() => navigate('/dashboard')}>
+          <Button onClick={() => navigate('/dashboard')} className="professional-button">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
           </Button>
-        </div>
+        </Card>
       </div>
     );
   }
   
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-secondary-100">
+      <div className="flex items-center justify-center h-screen bg-slate-50">
         <div className="flex flex-col items-center">
           <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-          <p className="text-tertiary">Loading document...</p>
+          <p className="text-slate-600 font-medium">Loading document...</p>
         </div>
       </div>
     );
   }
   
   return (
-    <div className="flex flex-col h-screen bg-secondary-100">
-      {/* Top Bar */}
-      <div className="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between">
-        <div className="flex items-center">
-          <Button variant="ghost" onClick={() => navigate('/dashboard')} className="mr-2">
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">Back</span>
-          </Button>
-          <h1 className="text-lg font-bold truncate max-w-[200px] sm:max-w-xs">{documentName}</h1>
+    <div className="flex flex-col h-screen bg-slate-50">
+      {/* Professional Header */}
+      <div className="bg-white border-b border-slate-200 px-6 py-4 shadow-sm">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/dashboard')} 
+              className="text-slate-600 hover:text-slate-900"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
+            <div className="h-6 w-px bg-slate-300"></div>
+            <div>
+              <h1 className="text-lg font-semibold text-slate-900 truncate max-w-[300px]">
+                {documentName}
+              </h1>
+              <p className="text-sm text-slate-500">Professional Document Editor</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-3">
+            <Button 
+              variant="outline" 
+              onClick={handleShare}
+              className="border-slate-300 text-slate-700 hover:bg-slate-50"
+            >
+              <Share className="h-4 w-4 mr-2" />
+              Share
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={handleDownload}
+              className="border-slate-300 text-slate-700 hover:bg-slate-50"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Download
+            </Button>
+            <Button 
+              onClick={handleSave} 
+              disabled={isSaving}
+              className="professional-button"
+            >
+              {isSaving ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="h-4 w-4 mr-2" />
+                  Save Changes
+                </>
+              )}
+            </Button>
+          </div>
         </div>
-        
-        <Button onClick={handleSave} disabled={isSaving}>
-          {isSaving ? (
-            <>
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Saving...
-            </>
-          ) : (
-            <>
-              <Save className="h-4 w-4 mr-2" />
-              Save Changes
-            </>
-          )}
-        </Button>
       </div>
+      
+      {/* Professional Toolbar */}
+      <ProfessionalToolbar
+        currentTool={currentTool}
+        onChangeTool={handleChangeTool}
+        selectedColor={selectedColor}
+        onColorChange={setSelectedColor}
+        selectedFont={selectedFont}
+        onFontChange={setSelectedFont}
+        selectedSize={selectedSize}
+        onSizeChange={setSelectedSize}
+        textStyle={textStyle}
+        onTextStyleChange={handleTextStyleChange}
+      />
       
       {/* Main Content Area */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Sidebar - Tools */}
-        <div className="w-16 border-r border-gray-200 bg-white">
-          <ToolbarAnnotation 
-            currentTool={currentTool} 
-            onChangeTool={handleChangeTool} 
-          />
-        </div>
-        
-        {/* Main PDF Viewer */}
+        {/* PDF Editor */}
         <div className="flex-1 overflow-hidden">
           <PDFViewer 
             documentPath={documentPath || ""}
             currentTool={currentTool}
+            textFormatting={{
+              color: selectedColor,
+              fontFamily: selectedFont,
+              fontSize: selectedSize,
+              fontWeight: textStyle.bold ? 'bold' : 'normal',
+              fontStyle: textStyle.italic ? 'italic' : 'normal',
+              textDecoration: textStyle.underline ? 'underline' : 'none',
+            }}
           />
         </div>
         
-        {/* Right Sidebar - Properties (conditionally rendered on larger screens) */}
-        {isMdAndUp && (
-          <div className="w-64 border-l border-gray-200 bg-white p-4">
-            <Card>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2">Properties</h3>
-                <p className="text-sm text-tertiary mb-4">
-                  Configure your selected tool settings.
-                </p>
-                
-                <Tabs defaultValue="appearance">
-                  <TabsList className="w-full">
-                    <TabsTrigger value="appearance" className="flex-1">Style</TabsTrigger>
-                    <TabsTrigger value="settings" className="flex-1">Settings</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="appearance" className="pt-4">
-                    <div className="space-y-3">
-                      <div>
-                        <label className="text-xs text-tertiary block mb-1">Color</label>
-                        <div className="flex space-x-2">
-                          {['#000000', '#FF0000', '#00FF00', '#0000FF', '#FFFF00'].map(color => (
-                            <TooltipProvider key={color}>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <button 
-                                    className="w-6 h-6 rounded-full border border-gray-300" 
-                                    style={{ backgroundColor: color }}
-                                  />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  {color}
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <label className="text-xs text-tertiary block mb-1">Thickness</label>
-                        <div className="flex space-x-2">
-                          {[1, 2, 3, 4, 5].map(size => (
-                            <TooltipProvider key={size}>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <button 
-                                    className="w-6 h-6 rounded-md border border-gray-300 flex items-center justify-center"
-                                  >
-                                    <div 
-                                      className="rounded-full bg-black" 
-                                      style={{ width: size * 2, height: size * 2 }}
-                                    />
-                                  </button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  {size}px
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="settings" className="pt-4">
-                    <div className="space-y-3">
-                      <p className="text-sm text-tertiary">
-                        Tool-specific settings will appear here.
-                      </p>
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </div>
-            </Card>
-          </div>
-        )}
+        {/* Sita Chat Sidebar */}
+        <div className="w-80 border-l border-slate-200">
+          <SitaChat />
+        </div>
       </div>
     </div>
   );
