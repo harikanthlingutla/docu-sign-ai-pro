@@ -7,111 +7,74 @@
 
 @layer base {
   :root {
-    --background: 240 10% 98%;
-    --foreground: 224 71% 4%;
-
-    --glass: 255 255 255 / 0.1;
-    --glass-border: 255 255 255 / 0.2;
-    --glass-hover: 255 255 255 / 0.15;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 224 71% 4%;
+    --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 224 71% 4%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 221 83% 53%;
+    --primary: 218 100% 37%;
     --primary-foreground: 210 40% 98%;
-    --primary-glow: 221 83% 63%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 9% 46%;
+    --secondary: 215 25% 27%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 47 96% 53%;
-    --accent-foreground: 26 83% 14%;
-    --accent-glow: 47 96% 63%;
+    --accent: 35 91% 48%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 221 83% 53%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 218 100% 37%;
 
-    --radius: 1rem;
+    --radius: 0.5rem;
 
-    --sidebar-background: 255 255 255 / 0.95;
-    --sidebar-foreground: 224 71% 4%;
-    --sidebar-primary: 224 71% 4%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 220 14% 96%;
-    --sidebar-accent-foreground: 224 71% 4%;
-    --sidebar-border: 255 255 255 / 0.2;
-    --sidebar-ring: 221 83% 53%;
-
-    /* Glassmorphism gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
-    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--accent-glow)) 100%);
-    
-    /* Shadow system */
-    --shadow-glass: 0 8px 32px rgba(31, 38, 135, 0.37);
-    --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.15);
-    --shadow-accent-glow: 0 0 40px rgba(245, 158, 11, 0.15);
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 224 71% 4%;
+    --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
-    --glass: 255 255 255 / 0.05;
-    --glass-border: 255 255 255 / 0.1;
-    --glass-hover: 255 255 255 / 0.08;
-
-    --card: 224 71% 4%;
+    --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 224 71% 4%;
+    --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 224 71% 4%;
-    --primary-glow: 217 91% 70%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 215 28% 17%;
+    --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 215 28% 17%;
-    --muted-foreground: 217 11% 65%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 47 96% 53%;
-    --accent-foreground: 26 83% 14%;
-    --accent-glow: 47 96% 63%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 63% 31%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 215 28% 17%;
-    --input: 215 28% 17%;
-    --ring: 217 91% 60%;
-
-    --sidebar-background: 0 0 0 / 0.95;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 210 40% 98%;
-    --sidebar-primary-foreground: 224 71% 4%;
-    --sidebar-accent: 215 28% 17%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 255 255 255 / 0.1;
-    --sidebar-ring: 217 91% 60%;
-
-    /* Dark mode glassmorphism */
-    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
-    --shadow-glow: 0 0 40px rgba(96, 165, 250, 0.2);
-    --shadow-accent-glow: 0 0 40px rgba(245, 158, 11, 0.2);
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
   }
 }
 
@@ -128,117 +91,34 @@
 }
 
 @layer components {
-  /* Layout utilities */
   .max-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
-  
   .section-padding {
     @apply py-12 md:py-20;
   }
-
-  /* Typography */
   .heading-1 {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold;
   }
-  
   .heading-2 {
-    @apply text-3xl md:text-4xl font-bold tracking-tight;
+    @apply text-3xl md:text-4xl font-bold;
   }
-  
   .heading-3 {
-    @apply text-2xl md:text-3xl font-bold tracking-tight;
+    @apply text-2xl md:text-3xl font-bold;
   }
-  
   .body-text {
-    @apply text-base leading-relaxed text-muted-foreground;
+    @apply text-base leading-relaxed text-slate-600;
   }
-
-  /* Glassmorphism components */
-  .glass-panel {
-    @apply backdrop-blur-xl border border-white/20 bg-white/10 
-           dark:bg-white/5 dark:border-white/10 
-           rounded-2xl shadow-[0_8px_32px_rgba(31,38,135,0.37)]
-           hover:bg-white/15 dark:hover:bg-white/8
-           transition-all duration-300 ease-out;
+  .card-shadow {
+    @apply shadow-lg hover:shadow-xl transition-all duration-300;
   }
-  
-  .glass-card {
-    @apply glass-panel p-6 hover:shadow-[0_8px_32px_rgba(31,38,135,0.5)]
-           hover:-translate-y-1 transition-all duration-300;
+  .input-field {
+    @apply block w-full rounded-lg border-0 py-3 px-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary;
   }
-  
-  .glass-sidebar {
-    @apply backdrop-blur-xl bg-white/95 dark:bg-black/95 
-           border-r border-white/20 dark:border-white/10;
+  .professional-button {
+    @apply inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200;
   }
-
-  /* Button variants */
-  .btn-glass {
-    @apply glass-panel px-6 py-3 text-sm font-medium
-           hover:scale-105 active:scale-95 
-           transition-all duration-200;
-  }
-  
-  .btn-gradient {
-    @apply bg-gradient-to-r from-primary to-primary-glow
-           text-primary-foreground px-6 py-3 rounded-2xl
-           font-semibold text-sm shadow-lg
-           hover:shadow-xl hover:scale-105 active:scale-95
-           transition-all duration-200;
-  }
-  
-  .btn-accent {
-    @apply bg-gradient-to-r from-accent to-accent-glow
-           text-accent-foreground px-6 py-3 rounded-2xl
-           font-semibold text-sm shadow-lg
-           hover:shadow-xl hover:scale-105 active:scale-95
-           transition-all duration-200;
-  }
-
-  /* Interactive elements */
-  .interactive-hover {
-    @apply transition-all duration-300 ease-out
-           hover:-translate-y-1 hover:shadow-xl
-           active:scale-95;
-  }
-  
-  .glow-primary {
-    @apply shadow-[0_0_40px_rgba(59,130,246,0.15)]
-           hover:shadow-[0_0_60px_rgba(59,130,246,0.3)]
-           transition-all duration-300;
-  }
-  
-  .glow-accent {
-    @apply shadow-[0_0_40px_rgba(245,158,11,0.15)]
-           hover:shadow-[0_0_60px_rgba(245,158,11,0.3)]
-           transition-all duration-300;
-  }
-
-  /* Status indicators */
-  .status-success {
-    @apply bg-emerald-500/20 border border-emerald-500/30 
-           text-emerald-700 dark:text-emerald-300 rounded-full px-3 py-1 text-xs font-medium;
-  }
-  
-  .status-pending {
-    @apply bg-amber-500/20 border border-amber-500/30 
-           text-amber-700 dark:text-amber-300 rounded-full px-3 py-1 text-xs font-medium;
-  }
-  
-  .status-warning {
-    @apply bg-red-500/20 border border-red-500/30 
-           text-red-700 dark:text-red-300 rounded-full px-3 py-1 text-xs font-medium;
-  }
-
-  /* Loading and progress */
-  .shimmer {
-    @apply relative overflow-hidden;
-  }
-  
-  .shimmer::before {
-    @apply absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite]
-           bg-gradient-to-r from-transparent via-white/20 to-transparent;
-    content: '';
+  .professional-card {
+    @apply bg-white rounded-xl shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300;
   }
 }
