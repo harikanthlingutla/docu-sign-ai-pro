@@ -60,53 +60,58 @@ export function UploadDropzone({ onFileSelect, className = "" }: UploadDropzoneP
   return (
     <div className={`w-full ${className}`}>
       <AnimatePresence mode="wait">
-          <div
+        {!isUploading ? (
+          <motion.div
             key="dropzone"
-            {...getRootProps()}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             <div
+              {...getRootProps()}
               className={`glass-card cursor-pointer p-12 text-center transition-all duration-300 ${
                 isDragActive 
                   ? 'border-primary/50 bg-primary/5 scale-105' 
                   : 'hover:border-primary/30 hover:bg-white/15 dark:hover:bg-white/5'
               }`}
             >
-          >
-            <input {...getInputProps()} />
-            
-            <motion.div
-              animate={{ 
-                y: isDragActive ? -10 : 0,
-                scale: isDragActive ? 1.1 : 1
-              }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="flex flex-col items-center space-y-6"
-            >
-              <div className={`p-6 rounded-2xl transition-all duration-300 ${
-                isDragActive 
-                  ? 'bg-primary/20 text-primary' 
-                  : 'glass-panel text-primary'
-              }`}>
-                <Upload className="h-12 w-12" />
-              </div>
+              <input {...getInputProps()} />
               
-              <div className="space-y-2">
-                <h3 className="text-2xl font-bold">
-                  {isDragActive ? 'Drop files here' : 'Upload Documents'}
-                </h3>
-                <p className="text-muted-foreground max-w-md">
-                  Drag and drop your PDFs, Word documents, or images here, or click to browse
-                </p>
-              </div>
-              
-              <div className="flex flex-wrap gap-2 justify-center">
-                <span className="status-success">PDF</span>
-                <span className="status-success">DOCX</span>
-                <span className="status-success">Images</span>
-              </div>
-              
-              <Button className="btn-gradient">
-                Choose Files
-              </Button>
+              <motion.div
+                animate={{ 
+                  y: isDragActive ? -10 : 0,
+                  scale: isDragActive ? 1.1 : 1
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="flex flex-col items-center space-y-6"
+              >
+                <div className={`p-6 rounded-2xl transition-all duration-300 ${
+                  isDragActive 
+                    ? 'bg-primary/20 text-primary' 
+                    : 'glass-panel text-primary'
+                }`}>
+                  <Upload className="h-12 w-12" />
+                </div>
+                
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold">
+                    {isDragActive ? 'Drop files here' : 'Upload Documents'}
+                  </h3>
+                  <p className="text-muted-foreground max-w-md">
+                    Drag and drop your PDFs, Word documents, or images here, or click to browse
+                  </p>
+                </div>
+                
+                <div className="flex flex-wrap gap-2 justify-center">
+                  <span className="status-success">PDF</span>
+                  <span className="status-success">DOCX</span>
+                  <span className="status-success">Images</span>
+                </div>
+                
+                <Button className="btn-gradient">
+                  Choose Files
+                </Button>
+              </motion.div>
             </div>
           </motion.div>
         ) : (
